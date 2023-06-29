@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 useHead({
-    title: "Nuxt 3 Starter",
+    title: "Datacorda Dashboard",
     htmlAttrs: {
         lang: "en",
     },

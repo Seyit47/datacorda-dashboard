@@ -9,13 +9,18 @@ export default defineNuxtConfig({
     },
 
     typescript: {
+        shim: false,
         strict: true,
         typeCheck: true,
     },
 
     css: ["@/assets/scss/style.scss"],
 
-    modules: ["@nuxtjs/tailwindcss", "@vueuse/nuxt"],
+    modules: ["@nuxtjs/tailwindcss", "@vueuse/nuxt", "nuxt-headlessui"],
+
+    headlessui: {
+        prefix: "Headless",
+    },
 
     app: {
         pageTransition: { name: "page", mode: "out-in" },

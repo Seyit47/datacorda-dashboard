@@ -1,0 +1,41 @@
+[{
+  "levels": "level1",
+  "churn": "34767",
+  "retain": "4881"
+}, {
+  "levels": "level2",
+  "churn": "27990",
+  "retain": "4482"
+}, {
+  "levels": "level3",
+  "churn": "23580",
+  "retain": "4244"
+}, {
+  "levels": "level4",
+  "churn": "20834",
+  "retain": "4014"
+}, {
+  "levels": "level5",
+  "churn": "18873",
+  "retain": "3799"
+}, {
+  "levels": "level6",
+  "churn": "17476",
+  "retain": "3676"
+}, {
+  "levels": "level7",
+  "churn": "16014",
+  "retain": "3482"
+}, {
+  "levels": "level8",
+  "churn": "14794",
+  "retain": "3438"
+}, {
+  "levels": "level9",
+  "churn": "13642",
+  "retain": "3342"
+}, {
+  "levels": "level10",
+  "churn": "12529",
+  "retain": "3223"
+}]
