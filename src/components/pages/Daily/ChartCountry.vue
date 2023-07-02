@@ -3,7 +3,9 @@ import { Chart } from "chart.js/auto";
 
 import data from "@/chart_data_test/users_by_country-bar_chart.json";
 
-onMounted(() => {
+const barChart = ref<HTMLCanvasElement | null>(null);
+
+function initChart() {
     const sortedData = data
         .sort((a: any, b: any) => b.number_of_users - a.number_of_users)
         .slice(0, 10); // Sort in descending order and take the first 30 observations
@@ -11,9 +13,9 @@ onMounted(() => {
     const countries = sortedData.map((entry) => entry.country);
     const users = sortedData.map((entry) => +entry.number_of_users);
 
-    const ctx = document.getElementById("barChart_Country") as HTMLCanvasElement;
+    const ctx = barChart.value as HTMLCanvasElement;
 
-    const chart = new Chart(ctx, {
+    return new Chart(ctx, {
         type: "bar",
         data: {
             labels: countries,
@@ -50,15 +52,21 @@ onMounted(() => {
             },
         },
     });
+}
 
-    onBeforeUnmount(() => {
-        chart.destroy();
-    });
+onMounted(() => {
+    if (barChart.value) {
+        const chart = initChart();
+
+        onBeforeUnmount(() => {
+            chart.destroy();
+        });
+    }
 });
 </script>
 
 <template>
     <div>
-        <canvas id="barChart_Country" style="height: auto"></canvas>
+        <canvas ref="barChart" style="height: auto"></canvas>
     </div>
 </template>

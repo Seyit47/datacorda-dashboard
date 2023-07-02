@@ -1,12 +1,15 @@
 <script lang="ts" setup>
-import IconDaily from "@/components/icons/IconDaily.vue";
-import IconDashboard from "@/components/icons/IconDashboard.vue";
-import IconFunnel from "@/components/icons/IconFunnel.vue";
-import IconLevelFlow from "@/components/icons/IconLevelFlow.vue";
 import IconLogout from "@/components/icons/IconLogout.vue";
 
 defineOptions({
     name: "AppSidebar",
+});
+
+defineProps({
+    list: {
+        type: Array as PropType<any[]>,
+        default: () => [],
+    },
 });
 </script>
 
@@ -18,100 +21,23 @@ defineOptions({
                     <img src="@/assets/img/datacorda-logo.png" alt="" />
                 </NuxtLink>
             </div>
-            <ul class="flex flex-col gap-y-2.5 px-5">
-                <li>
+            <ul class="flex flex-col gap-y-2.5 px-5 transition-all">
+                <li v-for="(item, index) in list" :key="index">
                     <NuxtLink
                         :to="{
-                            name: 'index',
+                            name: item.name,
                         }"
-                        class="group flex items-center gap-x-3.75 hover:bg-white hover:text-cl-main rounded-xl py-3.75 px-3.75 transition-colors duration-150"
-                        exact-active-class="bg-white text-cl-main"
-                        active-class=""
+                        class="group flex items-center gap-x-3.75 rounded-xl py-3.75 px-3.75 transition-colors duration-150"
+                        :class="{
+                            'text-cl-main bg-white': $route.name === item.name,
+                            'text-white hover:bg-white hover:text-cl-main':
+                                $route.name !== item.name,
+                        }"
                     >
                         <div class="w-8.75">
-                            <IconDaily />
+                            <component :is="item.icon"></component>
                         </div>
-                        <span class="text-size_20/16">Daily</span>
-                    </NuxtLink>
-                </li>
-                <li>
-                    <NuxtLink
-                        to="/"
-                        class="group flex items-center gap-x-3.75 hover:bg-white rounded-xl py-3.75 px-3.75 transition-colors duration-150"
-                    >
-                        <div
-                            class="w-8.75 text-white group-hover:text-cl-main transition-colors duration-150"
-                        >
-                            <IconDashboard />
-                        </div>
-                        <span
-                            class="text-size_20/16 text-white group-hover:text-cl-main transition-colors duration-150"
-                            >Dashboard</span
-                        >
-                    </NuxtLink>
-                </li>
-                <li>
-                    <NuxtLink
-                        to="/"
-                        class="group flex items-center gap-x-3.75 hover:bg-white rounded-xl py-3.75 px-3.75 transition-colors duration-150"
-                    >
-                        <div
-                            class="w-8.75 text-white group-hover:text-cl-main transition-colors duration-150"
-                        >
-                            <IconFunnel />
-                        </div>
-                        <span
-                            class="text-size_20/16 text-white group-hover:text-cl-main transition-colors duration-150"
-                            >Funnels</span
-                        >
-                    </NuxtLink>
-                </li>
-                <li>
-                    <NuxtLink
-                        to="/"
-                        class="group flex items-center gap-x-3.75 hover:bg-white rounded-xl py-3.75 px-3.75 transition-colors duration-150"
-                    >
-                        <div
-                            class="w-8.75 text-white group-hover:text-cl-main transition-colors duration-150"
-                        >
-                            <IconLevelFlow />
-                        </div>
-                        <span
-                            class="text-size_20/16 text-white group-hover:text-cl-main transition-colors duration-150"
-                            >Level-flow</span
-                        >
-                    </NuxtLink>
-                </li>
-                <li>
-                    <NuxtLink
-                        to="/"
-                        class="group flex items-center gap-x-3.75 hover:bg-white rounded-xl py-3.75 px-3.75 transition-colors duration-150"
-                    >
-                        <div
-                            class="w-8.75 text-white group-hover:text-cl-main transition-colors duration-150"
-                        >
-                            <IconDaily />
-                        </div>
-                        <span
-                            class="text-size_20/16 text-white group-hover:text-cl-main transition-colors duration-150"
-                            >Daily</span
-                        >
-                    </NuxtLink>
-                </li>
-                <li>
-                    <NuxtLink
-                        to="/"
-                        class="group flex items-center gap-x-3.75 hover:bg-white rounded-xl py-3.75 px-3.75 transition-colors duration-150"
-                    >
-                        <div
-                            class="w-8.75 text-white group-hover:text-cl-main transition-colors duration-150"
-                        >
-                            <IconDashboard />
-                        </div>
-                        <span
-                            class="text-size_20/16 text-white group-hover:text-cl-main transition-colors duration-150"
-                            >Dashboard</span
-                        >
+                        <span class="text-size_20/16">{{ item.label }}</span>
                     </NuxtLink>
                 </li>
             </ul>

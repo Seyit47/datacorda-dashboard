@@ -50,12 +50,14 @@
   },
   "dependencies": {
     "@heroicons/vue": "^2.0.18",
+    "@vuepic/vue-datepicker": "^5.4.0",
     "chart.js": "^4.3.0",
     "d3": "^7.8.5",
     "d3-dtree": "^2.4.1",
     "d3-funnel": "^2.1.1",
     "d3-graphviz": "^5.0.2",
     "d3-selection": "^3.0.0",
-    "d3-transition": "^3.0.1"
+    "d3-transition": "^3.0.1",
+    "gsap": "^3.12.2"
   }
 }

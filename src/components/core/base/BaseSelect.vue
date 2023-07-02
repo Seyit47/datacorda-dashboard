@@ -58,7 +58,7 @@ const people = ref([
                     leave-to-class="opacity-0"
                 >
                     <HeadlessListboxOptions
-                        class="absolute mt-1 max-h-60 divide-y px-4 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+                        class="absolute mt-1 max-h-60 divide-y px-4 z-[9999] w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
                     >
                         <HeadlessListboxOption
                             v-for="(person, index) in people"

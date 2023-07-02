@@ -71,6 +71,9 @@ module.exports = {
             rose: colors.rose,
 
             "cl-main": "#35275E",
+            "cl-blue": "#5570F1",
+            "cl-blue-button": "#2F4ED6",
+            "cl-bg": "#D4D1E9",
         }),
         columns: {
             auto: "auto",

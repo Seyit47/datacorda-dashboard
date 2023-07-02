@@ -3,18 +3,17 @@ import { Chart } from "chart.js/auto";
 
 import data from "@/chart_data_test/daily_active_users-line_chart.json";
 
-defineOptions({
-    name: "DailyChart",
-});
+const lineChart = ref<HTMLCanvasElement | null>(null);
 
-onMounted(() => {
+function initChart() {
     const sortedData = data.sort((a, b) => Number(new Date(a.date)) - Number(new Date(b.date)));
     const latestData = sortedData.slice(-30); // Take the last 30 observations
 
     const dates = latestData.map((entry) => entry.date);
     const users = latestData.map((entry) => +entry.daily_active_users);
 
-    const canvas = document.getElementById("lineChart_DAU") as HTMLCanvasElement;
+    const canvas = lineChart.value as HTMLCanvasElement;
+
     const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
 
     const colors = {
@@ -31,7 +30,7 @@ onMounted(() => {
     gradient.addColorStop(0.35, colors.purple.quarter);
     gradient.addColorStop(1, colors.purple.zero);
 
-    const chart = new Chart(ctx, {
+    return new Chart(ctx, {
         type: "line",
         data: {
             labels: dates,
@@ -76,15 +75,25 @@ onMounted(() => {
             },
         },
     });
+}
 
-    onBeforeUnmount(() => {
-        chart.destroy();
-    });
+defineOptions({
+    name: "DailyChart",
+});
+
+onMounted(() => {
+    if (lineChart.value) {
+        const chart = initChart();
+
+        onBeforeUnmount(() => {
+            chart.destroy();
+        });
+    }
 });
 </script>
 
 <template>
     <div>
-        <canvas id="lineChart_DAU" style="height: auto"></canvas>
+        <canvas ref="lineChart" style="height: auto"></canvas>
     </div>
 </template>

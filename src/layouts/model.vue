@@ -10,6 +10,16 @@ const navbarEl2 = ref<HTMLElement | null>(null);
 
 const route = useRoute();
 
+const navbarList = computed(() => {
+    return [
+        {
+            label: "Model Results",
+            icon: defineAsyncComponent(() => import("@/components/icons/IconModelResults.vue")),
+            name: "model",
+        },
+    ];
+});
+
 function initLine(el: HTMLElement) {
     const width = el.clientWidth;
     const left = el.offsetLeft;
@@ -22,48 +32,13 @@ onMounted(() => {
     moveLine();
 });
 
-const navbarList = computed(() => {
-    return [
-        {
-            label: "Daily",
-            icon: defineAsyncComponent(() => import("@/components/icons/IconDaily.vue")),
-            name: "analytics",
-        },
-        {
-            label: "Dashboard",
-            icon: defineAsyncComponent(() => import("@/components/icons/IconDashboard.vue")),
-            name: "analytics-dashboard",
-        },
-        {
-            label: "Funnels",
-            icon: defineAsyncComponent(() => import("@/components/icons/IconFunnel.vue")),
-            name: "",
-        },
-        {
-            label: "Level-flow",
-            icon: defineAsyncComponent(() => import("@/components/icons/IconLevelFlow.vue")),
-            name: "",
-        },
-        {
-            label: "xyz",
-            icon: defineAsyncComponent(() => import("@/components/icons/IconDaily.vue")),
-            name: "",
-        },
-        {
-            label: "qwerty",
-            icon: defineAsyncComponent(() => import("@/components/icons/IconDashboard.vue")),
-            name: "",
-        },
-    ];
-});
-
 function moveLine() {
-    if (route.path.includes("analytics")) {
+    if (route.name === "analytics") {
         if (navbarEl1.value && line.value) {
             initLine(navbarEl1.value);
         }
     }
-    if (route.path.includes("model")) {
+    if (route.name === "model") {
         if (navbarEl2.value && line.value) {
             initLine(navbarEl2.value);
         }
@@ -93,15 +68,15 @@ watch(route, () => {
                                         }"
                                         class="group flex items-center gap-x-2.5 px-6 py-3.75 rounded-xl"
                                         :class="{
-                                            'hover:bg-cl-main': !$route.path.includes('analytics'),
+                                            'hover:bg-cl-main': $route.name !== 'analytics',
                                         }"
                                     >
                                         <div
                                             class="w-8.5 transition-colors duration-150"
                                             :class="{
                                                 'text-cl-main group-hover:text-white':
-                                                    !$route.path.includes('analytics'),
-                                                'text-cl-blue': $route.path.includes('analytics'),
+                                                    $route.name !== 'analytics',
+                                                'text-cl-blue': $route.name === 'analytics',
                                             }"
                                         >
                                             <IconAnalytics />
@@ -110,8 +85,8 @@ watch(route, () => {
                                             class="text-size_20/16 font-bold transition-colors duration-150"
                                             :class="{
                                                 'text-cl-main group-hover:text-white':
-                                                    !$route.path.includes('analytics'),
-                                                'text-cl-blue': $route.path.includes('analytics'),
+                                                    $route.name !== 'analytics',
+                                                'text-cl-blue': $route.name === 'analytics',
                                             }"
                                             >ANALYTICS</span
                                         >
@@ -126,15 +101,15 @@ watch(route, () => {
                                         }"
                                         class="group flex items-center gap-x-2.5 px-6 py-3.75 rounded-xl"
                                         :class="{
-                                            'hover:bg-cl-main': !$route.path.includes('model'),
+                                            'hover:bg-cl-main': $route.name !== 'model',
                                         }"
                                     >
                                         <div
                                             class="w-8.5 transition-colors duration-150"
                                             :class="{
                                                 'text-cl-main group-hover:text-white':
-                                                    !$route.path.includes('model'),
-                                                'text-cl-blue': $route.path.includes('model'),
+                                                    $route.name !== 'model',
+                                                'text-cl-blue': $route.name === 'model',
                                             }"
                                         >
                                             <IconModel />
@@ -143,8 +118,8 @@ watch(route, () => {
                                             class="text-size_20/16 font-bold transition-colors duration-150"
                                             :class="{
                                                 'text-cl-main group-hover:text-white':
-                                                    !$route.path.includes('model'),
-                                                'text-cl-blue': $route.path.includes('model'),
+                                                    $route.name !== 'model',
+                                                'text-cl-blue': $route.name === 'model',
                                             }"
                                             >MODEL</span
                                         >
