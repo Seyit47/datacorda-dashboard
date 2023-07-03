@@ -57,93 +57,89 @@ watch(route, () => {
                 <AppSidebar class="sticky top-0 left-0 h-screen" :list="navbarList" />
             </div>
             <div style="grid-column: span 13 / span 13">
-                <div class="py-2.5 pr-2.5">
-                    <div class="min-h-screen rounded-xl bg-white">
-                        <div class="flex items-center shadow-lg px-6">
-                            <div class="relative flex items-center gap-x-3.75 py-2.5">
-                                <div ref="navbarEl1">
-                                    <NuxtLink
-                                        :to="{
-                                            name: 'analytics',
-                                        }"
-                                        class="group flex items-center gap-x-2.5 px-6 py-3.75 rounded-xl"
+                <div class="relative min-h-screen bg-white">
+                    <div class="sticky top-0 flex items-center px-6 z-[9999] shadow-lg bg-white">
+                        <div class="relative flex items-center gap-x-3.75 py-2.5">
+                            <div ref="navbarEl1">
+                                <NuxtLink
+                                    :to="{
+                                        name: 'analytics',
+                                    }"
+                                    class="group flex items-center gap-x-2.5 px-6 py-3.75 rounded-xl"
+                                    :class="{
+                                        'hover:bg-cl-main': $route.name !== 'analytics',
+                                    }"
+                                >
+                                    <div
+                                        class="w-8.5 transition-colors duration-150"
                                         :class="{
-                                            'hover:bg-cl-main': $route.name !== 'analytics',
+                                            'text-cl-main group-hover:text-white':
+                                                $route.name !== 'analytics',
+                                            'text-cl-blue': $route.name === 'analytics',
                                         }"
                                     >
-                                        <div
-                                            class="w-8.5 transition-colors duration-150"
-                                            :class="{
-                                                'text-cl-main group-hover:text-white':
-                                                    $route.name !== 'analytics',
-                                                'text-cl-blue': $route.name === 'analytics',
-                                            }"
-                                        >
-                                            <IconAnalytics />
-                                        </div>
-                                        <span
-                                            class="text-size_20/16 font-bold transition-colors duration-150"
-                                            :class="{
-                                                'text-cl-main group-hover:text-white':
-                                                    $route.name !== 'analytics',
-                                                'text-cl-blue': $route.name === 'analytics',
-                                            }"
-                                            >ANALYTICS</span
-                                        >
-                                    </NuxtLink>
-                                </div>
-
-                                <div ref="navbarEl2">
-                                    <NuxtLink
-                                        ref="navbarEl2"
-                                        :to="{
-                                            name: 'model',
-                                        }"
-                                        class="group flex items-center gap-x-2.5 px-6 py-3.75 rounded-xl"
+                                        <IconAnalytics />
+                                    </div>
+                                    <span
+                                        class="text-size_20/16 font-bold transition-colors duration-150"
                                         :class="{
-                                            'hover:bg-cl-main': $route.name !== 'model',
+                                            'text-cl-main group-hover:text-white':
+                                                $route.name !== 'analytics',
+                                            'text-cl-blue': $route.name === 'analytics',
                                         }"
+                                        >ANALYTICS</span
                                     >
-                                        <div
-                                            class="w-8.5 transition-colors duration-150"
-                                            :class="{
-                                                'text-cl-main group-hover:text-white':
-                                                    $route.name !== 'model',
-                                                'text-cl-blue': $route.name === 'model',
-                                            }"
-                                        >
-                                            <IconModel />
-                                        </div>
-                                        <span
-                                            class="text-size_20/16 font-bold transition-colors duration-150"
-                                            :class="{
-                                                'text-cl-main group-hover:text-white':
-                                                    $route.name !== 'model',
-                                                'text-cl-blue': $route.name === 'model',
-                                            }"
-                                            >MODEL</span
-                                        >
-                                    </NuxtLink>
-                                </div>
-
-                                <div
-                                    ref="line"
-                                    class="absolute bottom-0 left-0 w-full h-0.75 bg-cl-blue transition-all"
-                                ></div>
+                                </NuxtLink>
                             </div>
 
-                            <div class="ml-auto pr-2.5">
-                                <div class="flex items-center gap-x-6">
-                                    <span class="text-size_18/16">Username</span>
-                                    <div class="px-6 py-4 border text-size_18/16 font-bold">U</div>
-                                    <div class="px-6 py-4 border text-size_18/16 font-bold">
-                                        Game
+                            <div ref="navbarEl2">
+                                <NuxtLink
+                                    ref="navbarEl2"
+                                    :to="{
+                                        name: 'model',
+                                    }"
+                                    class="group flex items-center gap-x-2.5 px-6 py-3.75 rounded-xl"
+                                    :class="{
+                                        'hover:bg-cl-main': $route.name !== 'model',
+                                    }"
+                                >
+                                    <div
+                                        class="w-8.5 transition-colors duration-150"
+                                        :class="{
+                                            'text-cl-main group-hover:text-white':
+                                                $route.name !== 'model',
+                                            'text-cl-blue': $route.name === 'model',
+                                        }"
+                                    >
+                                        <IconModel />
                                     </div>
-                                </div>
+                                    <span
+                                        class="text-size_20/16 font-bold transition-colors duration-150"
+                                        :class="{
+                                            'text-cl-main group-hover:text-white':
+                                                $route.name !== 'model',
+                                            'text-cl-blue': $route.name === 'model',
+                                        }"
+                                        >MODEL</span
+                                    >
+                                </NuxtLink>
+                            </div>
+
+                            <div
+                                ref="line"
+                                class="absolute bottom-0 left-0 w-full h-0.75 bg-cl-blue transition-all"
+                            ></div>
+                        </div>
+
+                        <div class="ml-auto pr-2.5">
+                            <div class="flex items-center gap-x-6">
+                                <span class="text-size_18/16">Username</span>
+                                <div class="px-6 py-4 border text-size_18/16 font-bold">U</div>
+                                <div class="px-6 py-4 border text-size_18/16 font-bold">Game</div>
                             </div>
                         </div>
-                        <slot />
                     </div>
+                    <slot />
                 </div>
             </div>
         </div>

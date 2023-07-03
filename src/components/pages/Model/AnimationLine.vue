@@ -104,8 +104,22 @@ onBeforeUnmount(() => {
                 stroke-width="8"
             />
 
-            <circle v-for="(_, index) in 10" ref="circle1" :key="index" r="8" fill="white" />
-            <circle v-for="(_, index) in 10" ref="circle2" :key="index" r="8" fill="white" />
+            <circle
+                v-for="(_, index) in 10"
+                ref="circle1"
+                :key="index"
+                r="8"
+                fill="white"
+                class="will-change-transform"
+            />
+            <circle
+                v-for="(_, index) in 10"
+                ref="circle2"
+                :key="index"
+                r="8"
+                fill="white"
+                class="will-change-transform"
+            />
         </svg>
     </div>
 </template>
