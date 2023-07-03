@@ -6,8 +6,6 @@ const line1 = ref<SVGPathElement | undefined>();
 const line2 = ref<SVGPathElement | undefined>();
 const circle1 = ref<HTMLElement[]>([]);
 const circle2 = ref<HTMLElement[]>([]);
-const circle3 = ref<HTMLElement[]>([]);
-const circle4 = ref<HTMLElement[]>([]);
 
 const animations = ref<gsap.core.Tween[]>([]);
 
@@ -57,50 +55,6 @@ function initSecondAnimation(i: number) {
     }, 500);
 }
 
-function initThirdAnimation(i: number) {
-    const animation = gsap.to(circle3.value[i], {
-        repeat: -1,
-        duration: TIME,
-        motionPath: {
-            path: line1.value,
-            align: line1.value,
-            alignOrigin: [0.5, 0.5],
-        },
-    });
-
-    animations.value.push(animation);
-
-    i += 1;
-    if (i === 10) {
-        return;
-    }
-    setTimeout(() => {
-        return initThirdAnimation(i);
-    }, 500);
-}
-
-function initFourthAnimation(i: number) {
-    const animation = gsap.to(circle4.value[i], {
-        repeat: -1,
-        duration: TIME,
-        motionPath: {
-            path: line2.value,
-            align: line2.value,
-            alignOrigin: [0.5, 0.5],
-        },
-    });
-
-    animations.value.push(animation);
-
-    i += 1;
-    if (i === 10) {
-        return;
-    }
-    setTimeout(() => {
-        return initFourthAnimation(i);
-    }, 500);
-}
-
 onMounted(() => {
     gsap.registerPlugin(MotionPathPlugin);
 
@@ -110,12 +64,6 @@ onMounted(() => {
     setTimeout(() => {
         initSecondAnimation(0);
     }, 250);
-    setTimeout(() => {
-        initThirdAnimation(0);
-    }, 5750);
-    setTimeout(() => {
-        initFourthAnimation(0);
-    }, 5500);
 });
 
 onBeforeUnmount(() => {
@@ -125,8 +73,6 @@ onBeforeUnmount(() => {
     line2.value = undefined;
     circle1.value = [];
     circle2.value = [];
-    circle3.value = [];
-    circle4.value = [];
 });
 </script>
 
@@ -160,8 +106,6 @@ onBeforeUnmount(() => {
 
             <circle v-for="(_, index) in 10" ref="circle1" :key="index" r="8" fill="white" />
             <circle v-for="(_, index) in 10" ref="circle2" :key="index" r="8" fill="white" />
-            <circle v-for="(_, index) in 10" ref="circle3" :key="index" r="8" fill="white" />
-            <circle v-for="(_, index) in 10" ref="circle4" :key="index" r="8" fill="white" />
         </svg>
     </div>
 </template>
