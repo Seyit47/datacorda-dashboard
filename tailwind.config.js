@@ -74,6 +74,14 @@ module.exports = {
             "cl-blue": "#5570F1",
             "cl-blue-button": "#2F4ED6",
             "cl-bg": "#D4D1E9",
+
+            "cl-secondary": "#575cdd",
+            "cl-tertiary": "#436edb",
+            "cl-default": "#EFF1F9",
+            "cl-gray": "#8B8D97",
+
+            "cl-text": "#02274a",
+            "cl-text-hover": "#06335e",
         }),
         columns: {
             auto: "auto",
