@@ -74,6 +74,12 @@ module.exports = {
             "cl-blue": "#5570F1",
             "cl-blue-button": "#2F4ED6",
             "cl-bg": "#D4D1E9",
+            "cl-bg-shade": "#D7D7D7",
+            "cl-purple": "#9A49AE",
+            "cl-purple-shade": "#B6B2C2",
+            "cl-purple-light": "#AE5AC3",
+            "cl-purple-from": "#35275E",
+            "cl-purple-to": "#803693",
 
             "cl-secondary": "#575cdd",
             "cl-tertiary": "#436edb",

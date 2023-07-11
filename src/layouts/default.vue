@@ -82,8 +82,8 @@ watch(route, () => {
                 <AppSidebar class="sticky top-0 left-0 h-screen" :list="navbarList" />
             </div>
             <div style="grid-column: span 13 / span 13">
-                <div class="relative min-h-screen bg-white">
-                    <div class="flex items-center shadow-lg px-6">
+                <div class="relative min-h-screen bg-cl-purple-shade">
+                    <div class="sticky top-0 z-[9999] flex items-center shadow-lg px-6 bg-white">
                         <div class="relative flex items-center gap-x-3.75 py-2.5">
                             <div ref="navbarEl1">
                                 <NuxtLink
@@ -100,7 +100,7 @@ watch(route, () => {
                                         :class="{
                                             'text-cl-main group-hover:text-white':
                                                 !$route.path.includes('analytics'),
-                                            'text-cl-blue': $route.path.includes('analytics'),
+                                            'text-cl-purple': $route.path.includes('analytics'),
                                         }"
                                     >
                                         <IconAnalytics />
@@ -110,7 +110,7 @@ watch(route, () => {
                                         :class="{
                                             'text-cl-main group-hover:text-white':
                                                 !$route.path.includes('analytics'),
-                                            'text-cl-blue': $route.path.includes('analytics'),
+                                            'text-cl-purple': $route.path.includes('analytics'),
                                         }"
                                         >ANALYTICS</span
                                     >
@@ -133,7 +133,7 @@ watch(route, () => {
                                         :class="{
                                             'text-cl-main group-hover:text-white':
                                                 !$route.path.includes('model'),
-                                            'text-cl-blue': $route.path.includes('model'),
+                                            'text-cl-purple': $route.path.includes('model'),
                                         }"
                                     >
                                         <IconModel />
@@ -143,7 +143,7 @@ watch(route, () => {
                                         :class="{
                                             'text-cl-main group-hover:text-white':
                                                 !$route.path.includes('model'),
-                                            'text-cl-blue': $route.path.includes('model'),
+                                            'text-cl-purple': $route.path.includes('model'),
                                         }"
                                         >MODEL</span
                                     >
@@ -152,15 +152,23 @@ watch(route, () => {
 
                             <div
                                 ref="line"
-                                class="absolute bottom-0 left-0 w-full h-0.75 bg-cl-blue transition-all"
+                                class="absolute bottom-0 left-0 w-full h-1 bg-cl-purple transition-all"
                             ></div>
                         </div>
 
                         <div class="ml-auto pr-2.5">
                             <div class="flex items-center gap-x-6">
-                                <span class="text-size_18/16">Username</span>
-                                <div class="px-6 py-4 border text-size_18/16 font-bold">U</div>
-                                <div class="px-6 py-4 border text-size_18/16 font-bold">Game</div>
+                                <span class="text-size_18/16">Seyran Amandurdyyev</span>
+                                <div
+                                    class="px-3.75 py-4 rounded-[20px] bg-cl-main text-size_18/16 leading-none text-white font-bold"
+                                >
+                                    SA
+                                </div>
+                                <div
+                                    class="px-3.75 py-4 rounded-[20px] border bg-cl-main text-size_18/16 text-white font-bold"
+                                >
+                                    Game
+                                </div>
                             </div>
                         </div>
                     </div>

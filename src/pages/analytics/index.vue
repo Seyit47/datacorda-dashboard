@@ -1,9 +1,10 @@
 <script lang="ts" setup>
-import { ArrowUpIcon } from "@heroicons/vue/24/outline";
 import BaseMaxContent from "@/components/core/base/BaseMaxContent.vue";
 import BaseSelect from "@/components/core/base/BaseSelect.vue";
-import DailyChart from "@/components/pages/Daily/DailyChart.vue";
-import ChartCountry from "@/components/pages/Daily/ChartCountry.vue";
+import BarChart from "@/components/pages/Daily/BarChart.vue";
+import LineChart from "@/components/pages/Daily/LineChart.vue";
+import DoughnutChart from "@/components/pages/Daily/DoughnutChart.vue";
+import EmptyChart from "@/components/pages/Daily/EmptyChart.vue";
 </script>
 
 <template>
@@ -11,152 +12,94 @@ import ChartCountry from "@/components/pages/Daily/ChartCountry.vue";
         <BaseMaxContent class="px-6 py-8.75">
             <div class="flex flex-col gap-y-12 h-full">
                 <div class="flex items-center">
-                    <h2 class="text-[3rem] text-cl-main font-bold italic">Daily</h2>
+                    <h2 class="text-[2.5rem] text-cl-main font-bold">Daily</h2>
                     <div class="flex items-center gap-x-7.5 ml-auto">
-                        <div class="w-63">
+                        <div class="w-36">
                             <BaseSelect placeholder="Platform" />
                         </div>
-                        <div class="w-63">
+                        <div class="w-36">
                             <BaseSelect placeholder="Date" />
                         </div>
-                        <div class="w-63">
+                        <div class="w-36">
                             <BaseSelect placeholder="Range" />
                         </div>
                     </div>
                 </div>
-                <div class="grid grid-cols-12 gap-x-16 items-center">
-                    <div class="col-span-3">
-                        <div class="w-full h-full rounded-md shadow-c-select px-4 py-4">
-                            <div class="border-b border-cl-main pb-2.5">
-                                <div class="flex items-center w-full h-full px-4">
-                                    <h2 class="text-cl-main text-size_24/16 font-bold">
-                                        Retention
-                                    </h2>
-                                    <div class="ml-auto">
-                                        <span
-                                            class="px-4 py-1 bg-gray-100 text-size_14/16 font-medium"
-                                            >D0</span
+                <div class="grid grid-cols-12 gap-x-10">
+                    <div class="col-span-5 flex flex-col gap-y-7.5">
+                        <div
+                            class="pt-12 pb-5 px-7.5 rounded-[20px] bg-gradient-to-l from-cl-purple-to via-cl-purple-from to-cl-purple-to"
+                        >
+                            <div class="flex items-center justify-between px-7.5 py-6 border-b">
+                                <div class="flex">
+                                    <div class="flex flex-col">
+                                        <span class="text-[4.375rem] leading-none text-cl-bg-shade"
+                                            >64</span
                                         >
+                                        <span class="text-cl-bg-shade text-size_14/16"
+                                            >Daily Users</span
+                                        >
+                                    </div>
+                                    <div class="flex-start">
+                                        <div
+                                            class="bg-cl-bg-shade px-1 text-red-500 border-l-3 border-red-500"
+                                        >
+                                            -3.2%
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="flex flex-col">
+                                        <span class="text-[4.375rem] leading-none text-cl-bg-shade"
+                                            >20%</span
+                                        >
+                                        <span class="text-cl-bg-shade text-size_14/16"
+                                            >Retention</span
+                                        >
+                                    </div>
+                                    <div class="flex-start">
+                                        <div
+                                            class="bg-cl-bg-shade px-1 text-green-500 border-l-3 border-green-500"
+                                        >
+                                            +3.2%
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="px-4 pt-2.5 flex flex-col gap-y-2.5">
-                                <div class="flex items-center">
-                                    <h1 class="text-[3rem] leading-none font-bold">20%</h1>
-                                    <div class="flex items-center gap-x-2 ml-auto">
-                                        <ArrowUpIcon class="w-4.5 text-green-500" />
-                                        <span
-                                            class="text-green-500 text-size_18/16 leading-none font-bold"
-                                        >
-                                            5.5%
-                                        </span>
-                                    </div>
+                            <div class="grid grid-cols-3 pt-7.5 px-4">
+                                <div class="flex flex-col gap-y-2.5">
+                                    <span class="text-[2.5rem] leading-none text-cl-bg-shade"
+                                        >6</span
+                                    >
+                                    <span class="text-cl-bg-shade"> Lorem, ipsum. </span>
                                 </div>
-                                <span class="text-size_18/16">Daily Average: <b>10%</b></span>
+                                <div class="flex flex-col gap-y-2.5">
+                                    <span class="text-[2.5rem] leading-none text-cl-bg-shade"
+                                        >19</span
+                                    >
+                                    <span class="text-cl-bg-shade"> Lorem, ipsum. </span>
+                                </div>
+                                <div class="flex flex-col gap-y-2.5">
+                                    <span class="text-[2.5rem] leading-none text-cl-bg-shade"
+                                        >32%</span
+                                    >
+                                    <span class="text-cl-bg-shade"> Lorem, ipsum. </span>
+                                </div>
                             </div>
+                        </div>
+                        <div class="rounded-[20px] shadow-xl">
+                            <BarChart />
+                        </div>
+                        <div class="rounded-[20px] shadow-xl">
+                            <EmptyChart />
                         </div>
                     </div>
-                    <div class="col-span-3">
-                        <div class="w-full h-full rounded-md shadow-c-select px-4 py-4">
-                            <div class="border-b border-cl-main pb-2.5">
-                                <div class="flex items-center w-full h-full px-4">
-                                    <h2 class="text-cl-main text-size_24/16 font-bold">
-                                        Retention
-                                    </h2>
-                                    <div class="ml-auto">
-                                        <span
-                                            class="px-4 py-1 bg-gray-100 text-size_14/16 font-medium"
-                                            >D0</span
-                                        >
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="px-4 pt-2.5 flex flex-col gap-y-2.5">
-                                <div class="flex items-center">
-                                    <h1 class="text-[3rem] leading-none font-bold">20%</h1>
-                                    <div class="flex items-center gap-x-2 ml-auto">
-                                        <ArrowUpIcon class="w-4.5 text-green-500" />
-                                        <span
-                                            class="text-green-500 text-size_18/16 leading-none font-bold"
-                                        >
-                                            5.5%
-                                        </span>
-                                    </div>
-                                </div>
-                                <span class="text-size_18/16">Daily Average: <b>10%</b></span>
-                            </div>
+                    <div class="col-span-7 flex flex-col gap-y-7.5">
+                        <div class="rounded-[20px] shadow-xl">
+                            <DoughnutChart />
                         </div>
-                    </div>
-                    <div class="col-span-3">
-                        <div class="w-full h-full rounded-md shadow-c-select px-4 py-4">
-                            <div class="border-b border-cl-main pb-2.5">
-                                <div class="flex items-center w-full h-full px-4">
-                                    <h2 class="text-cl-main text-size_24/16 font-bold">
-                                        Retention
-                                    </h2>
-                                    <div class="ml-auto">
-                                        <span
-                                            class="px-4 py-1 bg-gray-100 text-size_14/16 font-medium"
-                                            >D0</span
-                                        >
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="px-4 pt-2.5 flex flex-col gap-y-2.5">
-                                <div class="flex items-center">
-                                    <h1 class="text-[3rem] leading-none font-bold">20%</h1>
-                                    <div class="flex items-center gap-x-2 ml-auto">
-                                        <ArrowUpIcon class="w-4.5 text-green-500" />
-                                        <span
-                                            class="text-green-500 text-size_18/16 leading-none font-bold"
-                                        >
-                                            5.5%
-                                        </span>
-                                    </div>
-                                </div>
-                                <span class="text-size_18/16">Daily Average: <b>10%</b></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-span-3">
-                        <div class="w-full h-full rounded-md shadow-c-select px-4 py-4">
-                            <div class="border-b border-cl-main pb-2.5">
-                                <div class="flex items-center w-full h-full px-4">
-                                    <h2 class="text-cl-main text-size_24/16 font-bold">
-                                        Retention
-                                    </h2>
-                                    <div class="ml-auto">
-                                        <span
-                                            class="px-4 py-1 bg-gray-100 text-size_14/16 font-medium"
-                                            >D0</span
-                                        >
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="px-4 pt-2.5 flex flex-col gap-y-2.5">
-                                <div class="flex items-center">
-                                    <h1 class="text-[3rem] leading-none font-bold">20%</h1>
-                                    <div class="flex items-center gap-x-2 ml-auto">
-                                        <ArrowUpIcon class="w-4.5 text-green-500" />
-                                        <span
-                                            class="text-green-500 text-size_18/16 leading-none font-bold"
-                                        >
-                                            5.5%
-                                        </span>
-                                    </div>
-                                </div>
-                                <span class="text-size_18/16">Daily Average: <b>10%</b></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="mt-auto">
-                    <div class="grid grid-cols-2 items-center">
-                        <div class="col-span-1">
-                            <DailyChart :key="`${getCurrentInstance()?.uid}-1`" />
-                        </div>
-                        <div class="col-span-1">
-                            <ChartCountry :key="`${getCurrentInstance()?.uid}-2`" />
+                        <div class="rounded-[20px] shadow-xl">
+                            <LineChart />
                         </div>
                     </div>
                 </div>
