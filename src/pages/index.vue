@@ -1,16 +1,4 @@
-<script lang="ts" setup>
-definePageMeta({
-    middleware: [
-        function (_, __) {
-            if (process.client) {
-                return navigateTo({
-                    name: "analytics",
-                });
-            }
-        },
-    ],
-});
-</script>
+<script lang="ts" setup></script>
 
 <template>
     <div></div>
