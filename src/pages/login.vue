@@ -17,8 +17,6 @@ const router = useRouter();
 
 const toast = useToast();
 
-const isSubmitted = ref(false);
-
 onBeforeRouteLeave((_, __, next) => {
     if (isFormDirty.value) {
         const confirmed = window.confirm("Do you really want to leave? you have unsaved changes!");
@@ -78,17 +76,25 @@ async function onSubmit() {
         formData.append("email", email.value);
         formData.append("password", password.value);
 
-        await $fetch("/api/user/signin", {
-            method: "POST",
-            body: formData,
-        });
+        // await $fetch("/api/user/signin", {
+        //     method: "POST",
+        //     body: formData,
+        // });
+
+        if (!(email.value === "datacorda@gmail.com" && password.value === "Datacorda2023!")) {
+            toast("Entered invalid information!", {
+                type: TYPE.ERROR,
+                timeout: 3000,
+            });
+            return;
+        }
 
         toast("You are logged in successfully!", {
             type: TYPE.SUCCESS,
             timeout: 3000,
         });
 
-        isSubmitted.value = true;
+        form.resetForm();
 
         router.push({
             name: "analytics",
