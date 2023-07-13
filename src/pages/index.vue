@@ -2,9 +2,11 @@
 definePageMeta({
     middleware: [
         function (_, __) {
-            return navigateTo({
-                name: "analytics",
-            });
+            if (process.client) {
+                return navigateTo({
+                    name: "analytics",
+                });
+            }
         },
     ],
 });
