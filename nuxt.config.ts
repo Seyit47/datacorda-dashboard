@@ -36,10 +36,10 @@ export default defineNuxtConfig({
 
     modules: [
         "@pinia/nuxt",
-        "@nuxt/image",
         "@nuxtjs/tailwindcss",
         "@vueuse/nuxt",
         "nuxt-headlessui",
+        "@nuxt/image",
     ],
 
     image: {
