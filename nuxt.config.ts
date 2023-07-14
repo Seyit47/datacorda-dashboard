@@ -34,17 +34,7 @@ export default defineNuxtConfig({
 
     css: ["@/assets/scss/style.scss"],
 
-    modules: [
-        "@pinia/nuxt",
-        "@nuxtjs/tailwindcss",
-        "@vueuse/nuxt",
-        "nuxt-headlessui",
-        "@nuxt/image",
-    ],
-
-    image: {
-        dir: "assets/img",
-    },
+    modules: ["@pinia/nuxt", "@nuxtjs/tailwindcss", "@vueuse/nuxt", "nuxt-headlessui"],
 
     headlessui: {
         prefix: "Headless",
