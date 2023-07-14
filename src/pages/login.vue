@@ -173,7 +173,7 @@ async function onSubmit() {
                 <div class="">
                     <span class="text-size_17/16 text-cl-gray"> Don’t have an account? </span>
                     <NuxtLink
-                        to="http://localhost:3000/account/sign-up"
+                        :to="`${$config.public.LANDING_PAGE_URL}/account/sign-up`"
                         :external="true"
                         class="text-cl-blue text-size_17/16"
                         >Sign Up</NuxtLink

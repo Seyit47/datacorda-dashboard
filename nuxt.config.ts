@@ -20,6 +20,12 @@ export default defineNuxtConfig({
         },
     },
 
+    runtimeConfig: {
+        public: {
+            LANDING_PAGE_URL: process.env.LANDING_PAGE_URL,
+        },
+    },
+
     typescript: {
         shim: false,
         strict: true,
