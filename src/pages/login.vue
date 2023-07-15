@@ -125,6 +125,7 @@ async function onSubmit() {
                     <div class="flex flex-col gap-y-9 -mx-1">
                         <LoginInput
                             v-model="email"
+                            name="email"
                             placeholder="Email address"
                             :errors="form.errors.value.email"
                         >
@@ -138,8 +139,9 @@ async function onSubmit() {
                         </LoginInput>
                         <LoginInput
                             v-model="password"
-                            :type="showPassword ? 'text' : 'password'"
+                            name="password"
                             placeholder="Password"
+                            :type="showPassword ? 'text' : 'password'"
                             :errors="form.errors.value.password"
                         >
                             <template #prepend>
