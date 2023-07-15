@@ -113,7 +113,7 @@ async function onSubmit() {
     <div class="w-full min-h-[calc(100vh-5rem)] flex justify-center items-center">
         <div class="flex flex-col items-center gap-y-15 w-145.75 py-10 px-8.5 bg-white rounded-xl">
             <div class="flex flex-col items-center gap-y-3">
-                <div class="w-36.25">
+                <div class="w-41.5">
                     <img src="@/assets/img/sign-in-logo.png" alt="Datacorda logo" />
                 </div>
 
