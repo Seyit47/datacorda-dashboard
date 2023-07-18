@@ -91,7 +91,7 @@ async function onSubmit() {
         formData.append("email", email.value);
         formData.append("password", password.value);
 
-        const res = await $fetch<AuthUser>(`${$config.public.BACKEND_URL}/api/user/signin`, {
+        const res = await $fetch<AuthUser>(`${$config.public.BACKEND_URL}/user/signin`, {
             method: "POST",
             body: formData,
         });
