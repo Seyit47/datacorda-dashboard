@@ -1,6 +1,6 @@
-import { AuthUser } from "@/types/response/auth";
+import { UserData } from "@/types/data/user";
 
 export interface UserState {
-    user: AuthUser | null;
-    access_token: string | null;
+    user: UserData | null;
+    accessToken: string | null;
 }

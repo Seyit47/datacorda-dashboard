@@ -1,21 +1,42 @@
 <script lang="ts" setup>
 import { useField, useForm, useIsFormDirty } from "vee-validate";
 import { object, string } from "yup";
+import { storeToRefs } from "pinia";
 import { useToast, TYPE } from "vue-toastification";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/vue/24/outline";
 import LoginInput from "@/components/pages/Login/Input.vue";
 import IconLock from "@/components/icons/IconLock.vue";
 import IconMessage from "@/components/icons/IconMessage.vue";
+import { useAuthStore } from "@/store/auth";
+import { AuthUser } from "@/types/api/auth";
 
 definePageMeta({
     layout: "login",
+    middleware: [
+        function () {
+            const authStore = useAuthStore();
+            const { accessToken } = storeToRefs(authStore);
+
+            if (accessToken.value) {
+                return navigateTo({
+                    name: "analytics",
+                });
+            }
+        },
+    ],
 });
 
 const showPassword = ref(false);
 
+const { $config } = useNuxtApp();
+
 const router = useRouter();
 
 const toast = useToast();
+
+const authStore = useAuthStore();
+
+const { setUser, setAccessToken } = authStore;
 
 onBeforeRouteLeave((_, __, next) => {
     if (isFormDirty.value) {
@@ -46,13 +67,7 @@ onBeforeUnmount(() => {
 const form = useForm({
     validationSchema: object({
         email: string().required("Required field!").email("Entered invalid email!"),
-        password: string()
-            .required("Required field!")
-            .min(8, "Password must be at least 8 characters long!")
-            .matches(/[A-Z]/, "Password must contain at least 1 uppercase characters!")
-            .matches(/[a-z]/, "Password must contain at least 1 lowercase character!")
-            .matches(/\d+/, "Password must contain at least 1 digit!")
-            .matches(/[@#$!%*^?()&]/, "Password must contain at least 1 special character!"),
+        password: string().required("Required field!"),
     }),
 });
 
@@ -76,18 +91,14 @@ async function onSubmit() {
         formData.append("email", email.value);
         formData.append("password", password.value);
 
-        // await $fetch("/api/user/signin", {
-        //     method: "POST",
-        //     body: formData,
-        // });
+        const res = await $fetch<AuthUser>(`${$config.public.BACKEND_URL}/api/user/signin`, {
+            method: "POST",
+            body: formData,
+        });
 
-        if (!(email.value === "datacorda@gmail.com" && password.value === "Datacorda2023!")) {
-            toast("Entered invalid information!", {
-                type: TYPE.ERROR,
-                timeout: 3000,
-            });
-            return;
-        }
+        setUser({ id: res.id, username: res.username, email: res.email });
+
+        setAccessToken(res.access_token);
 
         toast("You are logged in successfully!", {
             type: TYPE.SUCCESS,

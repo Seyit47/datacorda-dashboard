@@ -23,6 +23,7 @@ export default defineNuxtConfig({
     runtimeConfig: {
         public: {
             LANDING_PAGE_URL: process.env.LANDING_PAGE_URL,
+            BACKEND_URL: process.env.BACKEND_URL,
         },
     },
 
@@ -34,7 +35,13 @@ export default defineNuxtConfig({
 
     css: ["@/assets/scss/style.scss"],
 
-    modules: ["@pinia/nuxt", "@nuxtjs/tailwindcss", "@vueuse/nuxt", "nuxt-headlessui"],
+    modules: [
+        "@pinia/nuxt",
+        "@pinia-plugin-persistedstate/nuxt",
+        "@nuxtjs/tailwindcss",
+        "@vueuse/nuxt",
+        "nuxt-headlessui",
+    ],
 
     headlessui: {
         prefix: "Headless",
