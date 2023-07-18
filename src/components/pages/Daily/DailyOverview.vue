@@ -49,11 +49,15 @@ const { overviewData } = toRefs(props);
                 <span class="text-cl-bg-shade"> Total Active Users </span>
             </div>
             <div class="flex flex-col gap-y-2.5">
-                <span class="text-[2.5rem] leading-none text-cl-bg-shade">19</span>
+                <span class="text-[2.5rem] leading-none text-cl-bg-shade">{{
+                    overviewData.average_daily_new_user
+                }}</span>
                 <span class="text-cl-bg-shade"> Avg Daily New User </span>
             </div>
             <div class="flex flex-col gap-y-2.5">
-                <span class="text-[2.5rem] leading-none text-cl-bg-shade">32%</span>
+                <span class="text-[2.5rem] leading-none text-cl-bg-shade"
+                    >{{ overviewData.churn_rate }}%</span
+                >
                 <span class="text-cl-bg-shade"> Churn Rate </span>
             </div>
         </div>
