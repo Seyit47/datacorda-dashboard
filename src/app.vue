@@ -23,7 +23,7 @@ useHead({
 
 <template>
     <NuxtLayout>
-        <NuxtLoadingIndicator color="#4287f5" :duration="3000" :throttle="200" :height="5" />
+        <NuxtLoadingIndicator color="#9A49AE" :duration="3000" :throttle="200" :height="5" />
         <NuxtPage />
     </NuxtLayout>
 </template>

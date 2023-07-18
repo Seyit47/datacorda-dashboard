@@ -1,19 +1,34 @@
 <script setup lang="ts">
 import { Chart } from "chart.js/auto";
 
-import data from "@/chart_data_test/users_by_country-bar_chart.json";
+const props = defineProps({
+    sessionNumber: {
+        type: Array as PropType<any[]>,
+        default: () => [],
+    },
+});
+
+const { sessionNumber } = toRefs(props);
 
 const barChart = ref<HTMLCanvasElement | null>(null);
 
 function initChart() {
-    const sortedData = data
-        .sort((a: any, b: any) => b.number_of_users - a.number_of_users)
-        .slice(0, 10); // Sort in descending order and take the first 30 observations
+    const sortedData = sessionNumber.value.sort(
+        (a, b) => Number(new Date(a.date)) - Number(new Date(b.date))
+    );
 
-    const countries = sortedData.map((entry) => entry.country);
-    const users = sortedData.map((entry) => +entry.number_of_users);
+    const countries = sortedData.map((entry) => entry.date);
+    const users = sortedData.map((entry) => +entry.count);
 
     const ctx = barChart.value as HTMLCanvasElement;
+
+    const canvas = ctx.getContext("2d") as CanvasRenderingContext2D;
+
+    const gradient = canvas.createLinearGradient(0, 0, 0, 300);
+    gradient.addColorStop(0, "rgb(53, 39, 94)");
+    gradient.addColorStop(1, "rgb(154, 73, 174)");
+
+    Chart.defaults.color = gradient;
 
     return new Chart(ctx, {
         type: "bar",
@@ -21,17 +36,19 @@ function initChart() {
             labels: countries,
             datasets: [
                 {
-                    label: "Users by Country",
                     data: users,
-                    borderWidth: 2,
-                    backgroundColor: "rgba(120, 31, 211, 0.6)",
-                    borderColor: "rgba(120, 31, 211, 1)",
-                    hoverBackgroundColor: "rgba(120, 31, 211, 1)",
-                    borderRadius: 5,
+                    backgroundColor: gradient,
+                    borderRadius: Number.MAX_VALUE,
+                    borderSkipped: false,
                 },
             ],
         },
         options: {
+            plugins: {
+                legend: {
+                    display: false,
+                },
+            },
             scales: {
                 y: {
                     beginAtZero: true,
@@ -66,7 +83,12 @@ onMounted(() => {
 </script>
 
 <template>
-    <div>
-        <canvas ref="barChart" style="height: auto"></canvas>
+    <div class="flex flex-col justify-center gap-y-14 h-full">
+        <h2
+            class="text-[1.5rem] font-bold text-transparent bg-clip-text bg-gradient-to-t from-cl-purple to-cl-main"
+        >
+            Number of Sessions
+        </h2>
+        <canvas ref="barChart" v-bind="$attrs" class="h-full"></canvas>
     </div>
 </template>

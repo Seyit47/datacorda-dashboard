@@ -1,16 +1,33 @@
 <script lang="ts" setup>
 import { Chart } from "chart.js/auto";
 
-import data from "@/chart_data_test/daily_active_users-line_chart.json";
+const props = defineProps({
+    activeUsers: {
+        type: Array as PropType<any[]>,
+        default: () => [],
+    },
+    newUsers: {
+        type: Array as PropType<any[]>,
+        default: () => [],
+    },
+});
+
+const { activeUsers, newUsers } = toRefs(props);
 
 const lineChart = ref<HTMLCanvasElement | null>(null);
 
 function initChart() {
-    const sortedData = data.sort((a, b) => Number(new Date(a.date)) - Number(new Date(b.date)));
-    const latestData = sortedData.slice(-30); // Take the last 30 observations
+    const sortedData = activeUsers.value.sort(
+        (a, b) => Number(new Date(a.date)) - Number(new Date(b.date))
+    );
+    const latestActiveUserData = sortedData;
 
-    const dates = latestData.map((entry) => entry.date);
-    const users = latestData.map((entry) => +entry.daily_active_users);
+    const dates = latestActiveUserData.map((entry) => entry.date);
+    const chartActiveUsers = latestActiveUserData.map((entry) => +entry.count);
+    const sortedNewUsers = newUsers.value.sort(
+        (a, b) => Number(new Date(a.date)) - Number(new Date(b.date))
+    );
+    const chartNewUsers = sortedNewUsers.map((entry) => entry.count);
 
     const canvas = lineChart.value as HTMLCanvasElement;
 
@@ -18,17 +35,22 @@ function initChart() {
 
     const colors = {
         purple: {
-            default: "rgba(120, 31, 211, 1)",
-            half: "rgba(120, 31, 211, 0.9)",
-            quarter: "rgba(120, 31, 211, 0.7)",
-            zero: "rgba(120, 31, 211, 0.3)",
+            default: "rgba(154, 73, 174, 1)",
+            zero: "rgba(154, 73, 174, 0)",
+        },
+        orange: {
+            zero: "rgba(225, 139, 38, 0)",
+            default: "rgba(225, 139, 38, 1)",
         },
     };
 
-    const gradient = ctx.createLinearGradient(0, 25, 0, 300);
-    gradient.addColorStop(0, colors.purple.half);
-    gradient.addColorStop(0.35, colors.purple.quarter);
-    gradient.addColorStop(1, colors.purple.zero);
+    const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+    gradient.addColorStop(0, colors.orange.default);
+    gradient.addColorStop(1, colors.orange.zero);
+
+    const purpleGradient = ctx.createLinearGradient(0, 0, 0, 300);
+    purpleGradient.addColorStop(0, colors.purple.default);
+    purpleGradient.addColorStop(1, colors.purple.zero);
 
     return new Chart(ctx, {
         type: "line",
@@ -36,21 +58,37 @@ function initChart() {
             labels: dates,
             datasets: [
                 {
-                    label: "Daily Active Users (DAU)",
-                    data: users,
-                    // backgroundColor: 'rgba(120, 31, 211, 0.5)',
-                    borderColor: "rgba(120, 31, 211, 0)",
+                    data: chartActiveUsers,
+                    borderColor: colors.orange.default,
                     backgroundColor: gradient,
-                    borderWidth: 1.5,
                     fill: true,
+                    borderWidth: 3,
                     pointStyle: "circle",
                     pointRadius: 0,
                     pointHoverRadius: 7,
                     tension: 0.4,
+                    showLine: true,
+                },
+                {
+                    data: chartNewUsers,
+                    borderColor: colors.purple.default,
+                    backgroundColor: purpleGradient,
+                    fill: true,
+                    borderWidth: 3,
+                    pointStyle: "circle",
+                    pointRadius: 0,
+                    pointHoverRadius: 7,
+                    tension: 0.4,
+                    showLine: true,
                 },
             ],
         },
         options: {
+            plugins: {
+                legend: {
+                    display: false,
+                },
+            },
             interaction: {
                 intersect: false,
                 mode: "index",
@@ -93,7 +131,26 @@ onMounted(() => {
 </script>
 
 <template>
-    <div>
-        <canvas ref="lineChart" style="height: auto"></canvas>
+    <div class="flex flex-col gap-y-10">
+        <div class="flex">
+            <h2
+                class="text-[1.5rem] font-bold text-transparent bg-clip-text bg-gradient-to-t from-cl-purple to-cl-main"
+            >
+                Daily Users (Last 30 Days)
+            </h2>
+
+            <div class="flex flex-col items-end gap-y-4 ml-auto">
+                <div class="flex items-center gap-x-2.5">
+                    <h2 class="text-cl-orange">Daily Active Users</h2>
+                    <div class="w-8 h-4.5 rounded-full bg-cl-orange"></div>
+                </div>
+                <div class="flex items-center gap-x-2.5">
+                    <h2 class="text-cl-purple">Daily New Users</h2>
+                    <div class="w-8 h-4.5 rounded-full bg-cl-purple"></div>
+                </div>
+            </div>
+        </div>
+
+        <canvas ref="lineChart"></canvas>
     </div>
 </template>
