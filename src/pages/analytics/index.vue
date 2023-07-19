@@ -95,7 +95,7 @@ await fetchRequests();
                             <div class="w-1/2 border rounded-[20px] shadow-lg">
                                 <AverageSession />
                             </div>
-                            <div class="w-1/2 border rounded-[20px] shadow-lg">
+                            <div class="w-1/2 shrink-0 border rounded-[20px] shadow-lg">
                                 <EmptyChart />
                             </div>
                         </div>
@@ -109,7 +109,7 @@ await fetchRequests();
                             <div class="w-1/2 border rounded-[20px] shadow-lg">
                                 <DoughnutChart />
                             </div>
-                            <div class="w-1/2 border rounded-[20px] shadow-lg">
+                            <div class="w-1/2 shrink-0 border rounded-[20px] shadow-lg">
                                 <DailyIncome />
                             </div>
                         </div>

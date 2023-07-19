@@ -10,8 +10,8 @@ const { overviewData } = toRefs(props);
 </script>
 
 <template>
-    <div class="pt-7.5 pb-5 px-7.5 rounded-[20px] border shadow-lg bg-white">
-        <div class="flex items-center justify-between px-7.5 py-6 border-b">
+    <div class="py-5 px-7.5 rounded-[20px] border shadow-lg bg-white">
+        <div class="flex items-center justify-between px-7.5 3xl:pt-9 pt-15 pb-6 border-b">
             <div class="flex gap-x-4">
                 <div class="flex flex-col">
                     <span
