@@ -5,7 +5,7 @@ defineOptions({
 </script>
 
 <template>
-    <div class="max-w-[97rem] w-full mx-auto">
+    <div class="w-full mx-auto">
         <slot />
     </div>
 </template>

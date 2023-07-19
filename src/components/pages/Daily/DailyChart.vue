@@ -1,6 +1,12 @@
 <script lang="ts" setup>
 import { Chart } from "chart.js/auto";
 
+defineOptions({
+    name: "DailyChart",
+});
+
+const chart = ref<any>(null);
+
 const props = defineProps({
     activeUsers: {
         type: Array as PropType<any[]>,
@@ -44,15 +50,15 @@ function initChart() {
         },
     };
 
-    const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+    const gradient = ctx.createLinearGradient(0, 0, 0, 100);
     gradient.addColorStop(0, colors.orange.default);
     gradient.addColorStop(1, colors.orange.zero);
 
-    const purpleGradient = ctx.createLinearGradient(0, 0, 0, 300);
+    const purpleGradient = ctx.createLinearGradient(0, 0, 0, 100);
     purpleGradient.addColorStop(0, colors.purple.default);
     purpleGradient.addColorStop(1, colors.purple.zero);
 
-    return new Chart(ctx, {
+    chart.value = new Chart(ctx, {
         type: "line",
         data: {
             labels: dates,
@@ -84,6 +90,7 @@ function initChart() {
             ],
         },
         options: {
+            responsive: true,
             plugins: {
                 legend: {
                     display: false,
@@ -105,6 +112,7 @@ function initChart() {
                         font: {
                             size: 9,
                         },
+                        autoSkip: false,
                     },
                     grid: {
                         drawOnChartArea: false,
@@ -115,17 +123,22 @@ function initChart() {
     });
 }
 
-defineOptions({
-    name: "DailyChart",
-});
-
 onMounted(() => {
     if (lineChart.value) {
-        const chart = initChart();
+        initChart();
+    }
+});
 
-        onBeforeUnmount(() => {
-            chart.destroy();
-        });
+onBeforeUnmount(() => {
+    chart.value.destroy();
+    chart.value = null;
+});
+
+const route = useRoute();
+
+watch(route, (value) => {
+    if (value.path.includes("analytics")) {
+        chart.value.resize();
     }
 });
 </script>
@@ -142,15 +155,15 @@ onMounted(() => {
             <div class="flex flex-col items-end gap-y-4 ml-auto">
                 <div class="flex items-center gap-x-2.5">
                     <h2 class="text-cl-orange">Daily Active Users</h2>
-                    <div class="w-8 h-4.5 rounded-full bg-cl-orange"></div>
+                    <div class="w-6 h-6 rounded-full bg-cl-orange"></div>
                 </div>
                 <div class="flex items-center gap-x-2.5">
                     <h2 class="text-cl-purple">Daily New Users</h2>
-                    <div class="w-8 h-4.5 rounded-full bg-cl-purple"></div>
+                    <div class="w-6 h-6 rounded-full bg-cl-purple"></div>
                 </div>
             </div>
         </div>
 
-        <canvas ref="lineChart"></canvas>
+        <canvas ref="lineChart" style="height: 90%; width: 100%"></canvas>
     </div>
 </template>

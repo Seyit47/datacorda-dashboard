@@ -44,6 +44,7 @@ function initChart() {
             ],
         },
         options: {
+            responsive: true,
             plugins: {
                 legend: {
                     display: false,
@@ -55,12 +56,16 @@ function initChart() {
                     grid: {
                         drawOnChartArea: false,
                     },
+                    ticks: {
+                        autoSkip: false,
+                    },
                 },
                 x: {
                     ticks: {
                         font: {
-                            size: 9,
+                            size: window.innerWidth > 1280 ? 9 : 6,
                         },
+                        autoSkip: false,
                     },
                     grid: {
                         drawOnChartArea: false,
@@ -83,7 +88,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="flex flex-col justify-center gap-y-14 h-full">
+    <div class="flex flex-col justify-center gap-y-5 h-full">
         <h2
             class="text-[1.5rem] font-bold text-transparent bg-clip-text bg-gradient-to-t from-cl-purple to-cl-main"
         >
