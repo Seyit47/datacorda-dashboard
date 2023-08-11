@@ -124,12 +124,16 @@ function initChart() {
 }
 
 onMounted(() => {
-    if (lineChart.value) {
-        initChart();
-    }
+    initChart();
 });
 
 onBeforeUnmount(() => {
+    lineChart.value = null;
+
+    if (!chart.value) {
+        return;
+    }
+
     chart.value.destroy();
     chart.value = null;
 });

@@ -1,7 +1,10 @@
 <script lang="ts" setup>
 import BaseSelect from "@/components/core/base/BaseSelect.vue";
+import BaseDatePicker from "@/components/core/base/BaseDatePicker.vue";
 
 const model = ref("");
+const startDate = ref("");
+const endDate = ref("");
 </script>
 
 <template>
@@ -17,11 +20,11 @@ const model = ref("");
                 <span class="text-size_26/16 text-cl-main font-bold">Date Range</span>
                 <div class="flex items-center gap-x-2.5">
                     <div class="w-36.5">
-                        <BaseSelect v-model="model" placeholder="Date" />
+                        <BaseDatePicker v-model="startDate" placeholder="Date" />
                     </div>
                     <span class="text-cl-main font-bold">To:</span>
                     <div class="w-36.5">
-                        <BaseSelect v-model="model" placeholder="Range" />
+                        <BaseDatePicker v-model="endDate" placeholder="Range" />
                     </div>
                 </div>
             </div>

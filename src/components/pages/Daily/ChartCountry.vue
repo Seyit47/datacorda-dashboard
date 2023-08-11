@@ -10,6 +10,8 @@ const props = defineProps({
 
 const { sessionNumber } = toRefs(props);
 
+const chart = ref<any>(null);
+
 const barChart = ref<HTMLCanvasElement | null>(null);
 
 function initChart() {
@@ -30,7 +32,7 @@ function initChart() {
 
     Chart.defaults.color = gradient;
 
-    return new Chart(ctx, {
+    chart.value = new Chart(ctx, {
         type: "bar",
         data: {
             labels: countries,
@@ -77,13 +79,18 @@ function initChart() {
 }
 
 onMounted(() => {
-    if (barChart.value) {
-        const chart = initChart();
+    initChart();
+});
 
-        onBeforeUnmount(() => {
-            chart.destroy();
-        });
+onBeforeUnmount(() => {
+    barChart.value = null;
+
+    if (!chart.value) {
+        return;
     }
+
+    chart.value.destroy();
+    chart.value = null;
 });
 </script>
 
