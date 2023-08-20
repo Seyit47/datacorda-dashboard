@@ -3,11 +3,10 @@ import { storeToRefs } from "pinia";
 import BaseMaxContent from "@/components/core/base/BaseMaxContent.vue";
 import BaseSelect from "@/components/core/base/BaseSelect.vue";
 import BaseDatePicker from "@/components/core/base/BaseDatePicker.vue";
-import DailyUserInsights from "@/components/pages/Daily/DailyUserInsights.vue";
-import DailySessionInsights from "@/components/pages/Daily/DailySessionInsights.vue";
-import SessionNumber from "@/components/pages/Daily/SessionNumber.vue";
-import DailyChart from "@/components/pages/Daily/DailyChart.vue";
-import UserByCountry from "@/components/pages/Daily/UserByCountry.vue";
+import DailyAd from "@/components/pages/Engagement/DailyAd.vue";
+import EventCount from "@/components/pages/Engagement/EventCount.vue";
+import RetentionTable from "@/components/pages/Engagement/RetentionTable.vue";
+import DailyRetention from "@/components/pages/Engagement/DailyRetention.vue";
 import { useAuthStore } from "@/store/auth";
 
 const { $config } = useNuxtApp();
@@ -36,12 +35,10 @@ const filter = reactive<any>({
     end: null,
 });
 
-const activeUsers = ref<any[]>([]);
-const newUsers = ref<any[]>([]);
-const sessionNumber = ref<any[]>([]);
-const userByCountry = ref<any[]>([]);
-const userInsights = ref<any>(null);
-const sessionInsights = ref<any>(null);
+const dailyAdView = ref<any[]>([]);
+const eventCount = ref<any[]>([]);
+const retentionTable = ref<any[]>([]);
+const dailyRetention = ref<any[]>([]);
 
 watch(
     filter,
@@ -84,7 +81,7 @@ async function fetchRequests() {
         $fetch(
             `${
                 $config.public.BACKEND_URL
-            }/dashboard/daily-active-user-number/567767bf-65e0-4c08-80fe-3e2885f8dce8?${query.toString()}`,
+            }/dashboard/daily-ad-view/567767bf-65e0-4c08-80fe-3e2885f8dce8?${query.toString()}`,
             {
                 method: "GET",
                 headers: {
@@ -95,7 +92,7 @@ async function fetchRequests() {
         $fetch(
             `${
                 $config.public.BACKEND_URL
-            }/dashboard/daily-new-user-number/567767bf-65e0-4c08-80fe-3e2885f8dce8?${query.toString()}`,
+            }/dashboard/event-count-by-eventname/567767bf-65e0-4c08-80fe-3e2885f8dce8?${query.toString()}`,
             {
                 method: "GET",
                 headers: {
@@ -104,9 +101,7 @@ async function fetchRequests() {
             }
         ),
         $fetch(
-            `${
-                $config.public.BACKEND_URL
-            }/dashboard/daily-session-number/567767bf-65e0-4c08-80fe-3e2885f8dce8?${query.toString()}`,
+            `${$config.public.BACKEND_URL}/dashboard/daily-retention/567767bf-65e0-4c08-80fe-3e2885f8dce8`,
             {
                 method: "GET",
                 headers: {
@@ -115,31 +110,7 @@ async function fetchRequests() {
             }
         ),
         $fetch(
-            `${
-                $config.public.BACKEND_URL
-            }/dashboard/user-insights/567767bf-65e0-4c08-80fe-3e2885f8dce8?${query.toString()}`,
-            {
-                method: "GET",
-                headers: {
-                    authorization: `Bearer ${accessToken.value}`,
-                },
-            }
-        ),
-        $fetch(
-            `${
-                $config.public.BACKEND_URL
-            }/dashboard/session-insights/567767bf-65e0-4c08-80fe-3e2885f8dce8?${query.toString()}`,
-            {
-                method: "GET",
-                headers: {
-                    authorization: `Bearer ${accessToken.value}`,
-                },
-            }
-        ),
-        $fetch(
-            `${
-                $config.public.BACKEND_URL
-            }/dashboard/user-per-country/567767bf-65e0-4c08-80fe-3e2885f8dce8?${query.toString()}`,
+            `${$config.public.BACKEND_URL}/dashboard/daily-d1-retention/567767bf-65e0-4c08-80fe-3e2885f8dce8`,
             {
                 method: "GET",
                 headers: {
@@ -149,12 +120,10 @@ async function fetchRequests() {
         ),
     ]);
 
-    activeUsers.value = response[0] as any[];
-    newUsers.value = response[1] as any[];
-    sessionNumber.value = response[2] as any[];
-    userInsights.value = response[3] as any;
-    sessionInsights.value = response[4];
-    userByCountry.value = response[5] as any[];
+    dailyAdView.value = response[0] as any[];
+    eventCount.value = response[1] as any[];
+    retentionTable.value = response[2] as any[];
+    dailyRetention.value = response[3] as any[];
 }
 
 await fetchRequests();
@@ -165,7 +134,7 @@ await fetchRequests();
         <BaseMaxContent class="px-6 py-8.75">
             <div class="flex flex-col gap-y-7.5 h-full">
                 <div class="flex items-center">
-                    <h2 class="text-[2.5rem] text-cl-main font-bold">Overview</h2>
+                    <h2 class="text-[2.5rem] text-cl-main font-bold">Engagement</h2>
                     <div class="flex items-center gap-x-7.5 ml-auto">
                         <div class="w-42">
                             <BaseSelect
@@ -184,31 +153,36 @@ await fetchRequests();
                         </div>
                     </div>
                 </div>
-                <div class="flex flex-col gap-y-2.5">
-                    <div class="grid grid-cols-3 gap-x-2.5">
-                        <DailyUserInsights :overview-data="userInsights" />
-                        <DailySessionInsights :overview-data="sessionInsights" />
-                        <div class="w-full h-full border rounded-[20px] shadow-lg p-6">
-                            <SessionNumber :session-number="sessionNumber" class="w-full h-full" />
+                <div class="flex flex-col gap-y-5">
+                    <div class="grid grid-cols-[repeat(15,minmax(0,1fr))] gap-x-3">
+                        <div class="col-span-8">
+                            <div class="rounded-[20px] shadow-lg bg-white border p-7.5">
+                                <DailyAd :daily-ad-view="dailyAdView" />
+                            </div>
+                        </div>
+                        <div class="col-span-7">
+                            <div
+                                class="w-full h-full rounded-[20px] shadow-xl bg-white border p-10"
+                            >
+                                <EventCount :event-count="eventCount" />
+                            </div>
                         </div>
                     </div>
                     <div class="grid grid-cols-[repeat(15,minmax(0,1fr))] gap-x-3">
-                        <div class="col-span-10 flex flex-col gap-y-2.5">
-                            <div
-                                class="w-full h-full rounded-[20px] shadow-xl bg-white border p-14"
-                            >
-                                <DailyChart
-                                    :active-users="activeUsers"
-                                    :new-users="newUsers"
-                                    class="w-full h-full"
-                                />
+                        <div class="col-span-8">
+                            <div class="rounded-[20px] shadow-lg border p-6">
+                                <div class="relative 3xl:pt-[45%] pt-[44.7%]">
+                                    <div
+                                        class="absolute top-0 left-0 w-full h-full overflow-y-scroll"
+                                    >
+                                        <RetentionTable :list="retentionTable" />
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-span-5 flex flex-col gap-y-2.5">
-                            <div
-                                class="w-full h-full rounded-[20px] shadow-xl bg-white border py-10 px-6"
-                            >
-                                <UserByCountry :country-list="userByCountry" />
+                        <div class="col-span-7">
+                            <div class="w-full h-full rounded-[20px] shadow-xl bg-white border p-6">
+                                <DailyRetention :daily-retention="dailyRetention" />
                             </div>
                         </div>
                     </div>

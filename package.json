@@ -58,6 +58,7 @@
     "@heroicons/vue": "^2.0.18",
     "@vuepic/vue-datepicker": "^5.4.0",
     "chart.js": "^4.3.0",
+    "chartjs-plugin-zoom": "^2.0.1",
     "d3": "^7.8.5",
     "d3-dtree": "^2.4.1",
     "d3-funnel": "^2.1.1",

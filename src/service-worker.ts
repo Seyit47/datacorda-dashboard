@@ -6,10 +6,7 @@ self.addEventListener("install", (event: any) => {
 
 self.addEventListener("fetch", (event: any) => {
     // Check if this is a request for an image
-    if (
-        event.request.url.startsWith("https://api.datacorda.com") &&
-        event.request.method === "GET"
-    ) {
+    if (event.request.url.startsWith("http://localhost:3009") && event.request.method === "GET") {
         event.respondWith(
             caches.open(cacheName).then((cache) => {
                 // Go to the cache first

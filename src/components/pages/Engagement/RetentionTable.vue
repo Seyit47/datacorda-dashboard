@@ -34,17 +34,17 @@ function onMouseLeave() {
     <table class="w-full border-collapse">
         <thead class="sticky top-0 z-[9999] bg-white">
             <tr class="text-[0.7vw] whitespace-nowrap">
-                <th class="px-2.5 py-2.5">Date</th>
-                <th class="px-2.5 py-2.5">Users</th>
-                <th class="px-2.5 py-2.5 font-normal">Day 1</th>
-                <th class="px-2.5 py-2.5 font-normal">Day 2</th>
-                <th class="px-2.5 py-2.5 font-normal">Day 3</th>
-                <th class="px-2.5 py-2.5 font-normal">Day 4</th>
-                <th class="px-2.5 py-2.5 font-normal">Day 5</th>
-                <th class="px-2.5 py-2.5 font-normal">Day 6</th>
-                <th class="px-2.5 py-2.5 font-normal">Day 7</th>
-                <th class="px-2.5 py-2.5 font-normal">Day 14</th>
-                <th class="px-2.5 py-2.5 font-normal">Day 30</th>
+                <th class="px-2.5 py-[0.5vw]">Date</th>
+                <th class="px-2.5 py-[0.5vw]">Users</th>
+                <th class="px-2.5 py-[0.5vw] font-normal">Day 1</th>
+                <th class="px-2.5 py-[0.5vw] font-normal">Day 2</th>
+                <th class="px-2.5 py-[0.5vw] font-normal">Day 3</th>
+                <th class="px-2.5 py-[0.5vw] font-normal">Day 4</th>
+                <th class="px-2.5 py-[0.5vw] font-normal">Day 5</th>
+                <th class="px-2.5 py-[0.5vw] font-normal">Day 6</th>
+                <th class="px-2.5 py-[0.5vw] font-normal">Day 7</th>
+                <th class="px-2.5 py-[0.5vw] font-normal">Day 14</th>
+                <th class="px-2.5 py-[0.5vw] font-normal">Day 30</th>
             </tr>
         </thead>
         <tbody>
@@ -54,14 +54,14 @@ function onMouseLeave() {
                 class="text-center divide-x-2 divide-white divide-y-2 whitespace-nowrap text-[0.7vw]"
             >
                 <td
-                    class="px-2.5 py-1.5 cursor-default font-semibold"
+                    class="px-2.5 py-[0.3vw] cursor-default font-semibold"
                     @mouseenter="onMouseEnter(index)"
                     @mouseleave="onMouseLeave"
                 >
                     {{ getFormattedDate(item.date) }}
                 </td>
                 <td
-                    class="px-2.5 py-1 whitespace-nowrap font-medium"
+                    class="px-2.5 whitespace-nowrap font-medium"
                     :class="{
                         'opacity-20': curIndex !== undefined && curIndex !== index,
                     }"

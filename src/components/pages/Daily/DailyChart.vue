@@ -90,6 +90,7 @@ function initChart() {
             ],
         },
         options: {
+            aspectRatio: 19 / 6,
             responsive: true,
             plugins: {
                 legend: {

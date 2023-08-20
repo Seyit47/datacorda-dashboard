@@ -87,7 +87,7 @@ function moveLine() {
                     :to="{
                         name: 'model',
                     }"
-                    class="group flex items-center gap-x-2.5 px-6 py-3.75 rounded-xl"
+                    class="group flex justify-center items-center gap-x-2.5 px-6 py-3.75 min-w-46 rounded-xl"
                     :class="{
                         'hover:bg-cl-main': !$route.path.includes('model'),
                     }"
@@ -107,7 +107,7 @@ function moveLine() {
                             'text-cl-main group-hover:text-white': !$route.path.includes('model'),
                             'text-cl-purple': $route.path.includes('model'),
                         }"
-                        >MODEL</span
+                        >AI</span
                     >
                 </NuxtLink>
             </div>

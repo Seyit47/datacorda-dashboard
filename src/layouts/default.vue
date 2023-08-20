@@ -10,19 +10,19 @@ const navbarList = computed(() => {
             name: "analytics",
         },
         {
-            label: "Dashboard",
-            icon: defineAsyncComponent(() => import("@/components/icons/IconDashboard.vue")),
+            label: "Churn",
+            icon: defineAsyncComponent(() => import("@/components/icons/IconFunnel.vue")),
             name: "analytics-dashboard",
         },
         {
-            label: "Funnels",
-            icon: defineAsyncComponent(() => import("@/components/icons/IconFunnel.vue")),
-            name: "",
+            label: "Engagement",
+            icon: defineAsyncComponent(() => import("@/components/icons/IconClarityEvent.vue")),
+            name: "analytics-engagement",
         },
         {
-            label: "Level-flow",
-            icon: defineAsyncComponent(() => import("@/components/icons/IconLevelFlow.vue")),
-            name: "",
+            label: "Monetization",
+            icon: defineAsyncComponent(() => import("@/components/icons/IconMonetization.vue")),
+            name: "analytics-monetization",
         },
     ];
 });
