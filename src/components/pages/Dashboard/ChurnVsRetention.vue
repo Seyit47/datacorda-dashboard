@@ -63,7 +63,7 @@ onMounted(() => {
         .datum(density1)
         .attr("fill", "#F19191")
         .attr("opacity", ".6")
-        .attr("stroke", "#000")
+        .attr("stroke", "#FF4C00")
         .attr("stroke-width", 1)
         .attr("stroke-linejoin", "round")
         .attr(
@@ -85,7 +85,7 @@ onMounted(() => {
         .datum(density2)
         .attr("fill", "#B6F1B8")
         .attr("opacity", ".6")
-        .attr("stroke", "#000")
+        .attr("stroke", "#2EC52B")
         .attr("stroke-width", 1)
         .attr("stroke-linejoin", "round")
         .attr(

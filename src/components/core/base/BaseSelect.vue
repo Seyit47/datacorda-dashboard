@@ -22,9 +22,21 @@ const props = defineProps({
         type: Function,
         default: (item: any) => item,
     },
+    initItemName: {
+        type: Function,
+        default: (item: any) => item,
+    },
+    initItemValue: {
+        type: Function,
+        default: (item: any) => item,
+    },
+    size: {
+        type: String,
+        default: "md",
+    },
 });
 
-const { itemName, itemValue, modelValue, list } = toRefs(props);
+const { itemName, itemValue, initItemName, initItemValue, modelValue, list } = toRefs(props);
 
 const emit = defineEmits(["update:modelValue"]);
 
@@ -35,7 +47,7 @@ const localName = ref("");
 function onInit() {
     if (!localValue.value && modelValue.value) {
         const item = list.value.reduce((acc, curValue) => {
-            if (itemValue.value(curValue) === modelValue.value) {
+            if (initItemValue.value(curValue) === modelValue.value) {
                 return curValue;
             }
             return acc;
@@ -43,7 +55,7 @@ function onInit() {
         if (!item) {
             return;
         }
-        localName.value = itemName.value(item);
+        localName.value = initItemName.value(item);
         localValue.value = item;
     }
 }
@@ -61,7 +73,11 @@ onInit();
         <HeadlessListbox v-model="localValue" @update:model-value="onUpdate">
             <div class="relative mt-1">
                 <HeadlessListboxButton
-                    class="relative w-full shadow-c-select rounded-full bg-white py-2 pl-3 pr-5 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-cl-main sm:text-sm"
+                    class="relative w-full shadow-c-select bg-white pl-3 pr-5 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-cl-main sm:text-sm"
+                    :class="{
+                        'py-2 rounded-full': size === 'md',
+                        'py-3 rounded-[7px]': size === 'lg',
+                    }"
                 >
                     <span
                         v-if="localName"
