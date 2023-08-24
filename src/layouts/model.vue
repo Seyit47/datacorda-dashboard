@@ -10,6 +10,11 @@ const navbarList = computed(() => {
             name: "model",
         },
         {
+            label: "Segmentation",
+            icon: defineAsyncComponent(() => import("@/components/icons/IconModelResults.vue")),
+            name: "model-segmentation",
+        },
+        {
             label: "Decision Tree",
             icon: defineAsyncComponent(() => import("@/components/icons/IconModelResults.vue")),
             name: "model-tree",
