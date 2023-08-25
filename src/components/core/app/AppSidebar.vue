@@ -42,7 +42,7 @@ async function logout() {
                         :to="{
                             name: item.name,
                         }"
-                        class="group flex items-center gap-x-5 py-3.75 px-8.75 border-cl-purple-light transition-all duration-150"
+                        class="group flex items-center gap-x-5 py-3.75 pl-8.75 border-cl-purple-light transition-all duration-150"
                         :class="{
                             'bg-gradient-to-b from-cl-purple-to via-cl-purple-to/70 to-cl-purple-to/50 border-r-6':
                                 $route.name === item.name,

@@ -73,25 +73,25 @@ onInit();
         <HeadlessListbox v-model="localValue" @update:model-value="onUpdate">
             <div class="relative mt-1">
                 <HeadlessListboxButton
-                    class="relative w-full shadow-c-select bg-white pl-3 pr-5 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-cl-main sm:text-sm"
+                    class="relative flex items-center w-full shadow-c-select bg-white px-4 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-cl-main sm:text-sm"
                     :class="{
                         'py-2 rounded-full': size === 'md',
                         'py-3 rounded-[7px]': size === 'lg',
                     }"
                 >
-                    <span
-                        v-if="localName"
-                        class="flex justify-center text-size_base text-cl-main font-bold"
-                        >{{ localName }}</span
-                    >
-                    <span
-                        v-else
-                        class="flex justify-center text-size_base text-cl-main font-bold"
-                        >{{ placeholder }}</span
-                    >
-                    <span
-                        class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3.75"
-                    >
+                    <div class="w-full whitespace-nowrap overflow-auto no-scrollbar">
+                        <span
+                            v-if="localName"
+                            class="w-full inline-block text-center text-size_base text-cl-main font-bold"
+                            >{{ localName }}</span
+                        >
+                        <span
+                            v-else
+                            class="w-full inline-block text-center text-size_base text-cl-main font-bold"
+                            >{{ placeholder }}</span
+                        >
+                    </div>
+                    <span class="pointer-events-none ml-auto">
                         <ChevronDownIcon class="h-5 w-5 text-cl-main" aria-hidden="true" />
                     </span>
                 </HeadlessListboxButton>
@@ -139,3 +139,13 @@ onInit();
         </HeadlessListbox>
     </div>
 </template>
+
+<style lang="scss" scoped>
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+</style>

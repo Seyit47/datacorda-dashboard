@@ -5,19 +5,19 @@ import AppHeader from "@/components/core/app/AppHeader.vue";
 const navbarList = computed(() => {
     return [
         {
-            label: "Model Results",
+            label: "Model",
             icon: defineAsyncComponent(() => import("@/components/icons/IconModelResults.vue")),
             name: "model",
         },
         {
             label: "Segmentation",
-            icon: defineAsyncComponent(() => import("@/components/icons/IconModelResults.vue")),
+            icon: defineAsyncComponent(() => import("@/components/icons/IconDecisionTree.vue")),
             name: "model-segmentation",
         },
         {
-            label: "Decision Tree",
-            icon: defineAsyncComponent(() => import("@/components/icons/IconModelResults.vue")),
-            name: "model-tree",
+            label: "Player's Journey",
+            icon: defineAsyncComponent(() => import("@/components/icons/IconPlayerJourney.vue")),
+            name: "model-players-journey",
         },
     ];
 });

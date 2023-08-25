@@ -5,6 +5,7 @@ import ModalSegmentation from "./ModalSegmentation/Wrapper.vue";
 import BaseSelect from "@/components/core/base/BaseSelect.vue";
 import BaseDatePicker from "@/components/core/base/BaseDatePicker.vue";
 import { useAuthStore } from "@/store/auth";
+import { truncateValue } from "@/utils/index";
 
 const props = defineProps({
     instance: {
@@ -18,19 +19,18 @@ const { instance } = toRefs(props);
 const filter = reactive<any>({
     model: null,
     size: 2,
-    start: null,
-    end: null,
+    range: null,
 });
 
 watch(instance, () => {
     if (!instance.value) {
-        filter.size = 2;
         segmentList.value = [];
+        filter.size = 2;
         fetchSegmentOrder();
         return;
     }
+    segmentList.value = [];
     filter.size = instance.value.size;
-    filter.model = instance.value.model;
     fetchSegmentOrder();
 });
 
@@ -38,9 +38,22 @@ const $toast = useToast();
 
 const modal = ref<any>(null);
 
+const isLoading = ref(false);
+
 const segmentList = ref<any[]>([]);
 const segmentNameInput = ref<HTMLInputElement[]>([]);
 const modelList = ref<any[]>([]);
+const colors = [
+    [1, 10],
+    [1, 5, 10],
+    [1, 4, 7, 10],
+    [1, 3, 6, 8, 10],
+    [1, 2, 4, 6, 8, 10],
+    [1, 2, 4, 6, 8, 9, 10],
+    [1, 2, 3, 4, 6, 8, 9, 10],
+    [1, 2, 3, 4, 5, 6, 8, 9, 10],
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+];
 
 const currentSegmentIndex = ref();
 
@@ -78,51 +91,67 @@ async function fetchModelList() {
 }
 
 async function fetchSegmentOrder() {
-    const query = new URLSearchParams();
+    isLoading.value = true;
+    try {
+        const query = new URLSearchParams();
 
-    if (filter.model) {
-        query.append("model", filter.model);
-    }
-
-    if (filter.size) {
-        query.append("size", filter.size);
-    }
-
-    const response = await $fetch(
-        `${$config.public.BACKEND_URL}/prediction/analytics/${
-            filter.model
-        }?game_id=567767bf-65e0-4c08-80fe-3e2885f8dce8&${query.toString()}`,
-        {
-            method: "GET",
-            headers: {
-                authorization: `Bearer ${accessToken.value}`,
-            },
+        if (filter.model) {
+            query.append("model", filter.model);
         }
-    );
 
-    if (instance.value) {
+        if (filter.size) {
+            query.append("size", filter.size);
+        }
+
+        if (filter.range) {
+            query.append("start", filter.range[0]);
+            query.append("end", filter.range[1]);
+        }
+
+        const response = await $fetch(
+            `${$config.public.BACKEND_URL}/prediction/analytics/${
+                filter.model
+            }?game_id=567767bf-65e0-4c08-80fe-3e2885f8dce8&${query.toString()}`,
+            {
+                method: "GET",
+                headers: {
+                    authorization: `Bearer ${accessToken.value}`,
+                },
+            }
+        );
+
+        if (instance.value) {
+            segmentList.value = (response as any[]).reduce((acc, curValue, curIndex) => {
+                const segment = {
+                    name:
+                        segmentList.value[curIndex] && segmentList.value[curIndex].name
+                            ? segmentList.value[curIndex].name
+                            : instance.value[`s${curIndex + 1}`]
+                            ? instance.value[`s${curIndex + 1}`]
+                            : `Segment ${curIndex + 1}`,
+                    user_number: curValue.user_number,
+                };
+
+                return [...acc, segment];
+            }, []);
+            return;
+        }
+
         segmentList.value = (response as any[]).reduce((acc, curValue, curIndex) => {
             const segment = {
-                name: instance.value[`s${curIndex + 1}`]
-                    ? instance.value[`s${curIndex + 1}`]
-                    : `Segment ${curIndex + 1}`,
+                name:
+                    segmentList.value[curIndex] && segmentList.value[curIndex].name
+                        ? segmentList.value[curIndex].name
+                        : `Segment ${curIndex + 1}`,
                 user_number: curValue.user_number,
             };
             return [...acc, segment];
         }, []);
-        return;
+    } catch (error: any) {
+        $toast.error(error.response.message);
+    } finally {
+        isLoading.value = false;
     }
-
-    segmentList.value = (response as any[]).reduce((acc, curValue, curIndex) => {
-        const segment = {
-            name:
-                segmentList.value[curIndex] && segmentList.value[curIndex].name
-                    ? segmentList.value[curIndex].name
-                    : `Segment ${curIndex + 1}`,
-            user_number: curValue.user_number,
-        };
-        return [...acc, segment];
-    }, []);
 }
 
 async function submitForm() {
@@ -156,10 +185,9 @@ async function submitForm() {
 
         $toast.success(message);
         emit("refresh");
-        if (!instance.value) {
-            segmentList.value = [];
-            filter.size = 2;
-        }
+        segmentList.value = [];
+        filter.size = 2;
+        await fetchSegmentOrder();
     } catch (error: any) {
         $toast.error(error.message);
     }
@@ -189,7 +217,6 @@ function onDelete(index: number) {
 }
 
 await fetchModelList();
-await fetchSegmentOrder();
 </script>
 
 <template>
@@ -200,13 +227,18 @@ await fetchSegmentOrder();
                     <BaseSelect v-model="filter.model" :list="modelList" placeholder="Model" />
                 </div>
                 <div class="w-42">
-                    <BaseDatePicker v-model="filter.start" placeholder="Date" />
+                    <BaseDatePicker
+                        v-model="filter.range"
+                        :item-name="(item:string[]) => `${item[0]}/${item[1]}`"
+                        placeholder="Date Range"
+                        range
+                    />
                 </div>
 
                 <div class="w-34 ml-auto">
                     <button
                         type="submit"
-                        class="flex justify-center items-center w-full rounded-full text-white font-bold py-2 bg-gradient-to-b from-[#35275E] to-[#D9D9D900]"
+                        class="flex justify-center items-center w-full rounded-full text-white font-bold py-2 border border-cl-main bg-cl-main hover:bg-white hover:text-cl-main transition-colors duration-150"
                     >
                         Save
                     </button>
@@ -227,8 +259,26 @@ await fetchSegmentOrder();
                 :key="index"
                 class="flex items-center py-4 px-6 rounded-[10px]"
                 :class="{
-                    'bg-gradient-to-b from-[#FF4C00] to-[#FFFFFF]': index % 2 === 0,
-                    'bg-gradient-to-b from-[#2EC52B] to-[#D9D9D900]': index % 2 !== 0,
+                    'bg-gradient-to-b from-[#FF4C00] to-[#FFFFFF]':
+                        colors[filter.size - 2][index] === 1,
+                    'bg-gradient-to-b from-[#DB6107] to-[#D9D9D900]':
+                        colors[filter.size - 2][index] === 2,
+                    'bg-gradient-to-b from-[#B3780F] to-[#D9D9D900]':
+                        colors[filter.size - 2][index] === 3,
+                    'bg-gradient-to-b from-[#978815] to-[#D9D9D900]':
+                        colors[filter.size - 2][index] === 4,
+                    'bg-gradient-to-b from-[#988715] to-[#D9D9D900]':
+                        colors[filter.size - 2][index] === 5,
+                    'bg-gradient-to-b from-[#80951A] to-[#80951A00]':
+                        colors[filter.size - 2][index] === 6,
+                    'bg-gradient-to-b from-[#779A1C] to-[#D9D9D900]':
+                        colors[filter.size - 2][index] === 7,
+                    'bg-gradient-to-b from-[#68A31F] to-[#D9D9D900]':
+                        colors[filter.size - 2][index] === 8,
+                    'bg-gradient-to-b from-[#53AF23] to-[#53AF2300]':
+                        colors[filter.size - 2][index] === 9,
+                    'bg-gradient-to-b from-[#2EC52B] to-[#D9D9D900]':
+                        colors[filter.size - 2][index] === 10,
                 }"
             >
                 <div class="flex items-center gap-x-2.5">
@@ -302,7 +352,7 @@ await fetchSegmentOrder();
                                 />
                             </svg>
                         </div>
-                        {{ item.user_number }}
+                        {{ truncateValue(item.user_number) }}
                     </div>
                 </div>
             </div>
@@ -310,6 +360,7 @@ await fetchSegmentOrder();
             <button
                 v-if="filter.size < 10"
                 class="flex justify-center items-center border rounded-[10px] py-2"
+                :disabled="isLoading"
                 @click="filter.size += 1"
             >
                 <span class="text-[2rem] text-cl-gray font-bold">+</span>

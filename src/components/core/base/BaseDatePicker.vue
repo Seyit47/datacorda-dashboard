@@ -12,6 +12,14 @@ const props = defineProps({
         type: String,
         default: "",
     },
+    itemName: {
+        type: Function as PropType<(item: any) => any>,
+        default: (item: any) => item,
+    },
+});
+
+defineOptions({
+    inheritAttrs: false,
 });
 
 const emit = defineEmits(["update:modelValue"]);
@@ -20,10 +28,10 @@ const localValue = useSyncProps<string>(props, "modelValue", emit);
 </script>
 
 <template>
-    <div>
+    <div class="w-full h-full">
         <VueDatePicker
             v-model="localValue"
-            placeholder="Start date"
+            v-bind="$attrs"
             :auto-apply="true"
             :max-date="`${new Date()}`"
             model-type="format"
@@ -33,21 +41,21 @@ const localValue = useSyncProps<string>(props, "modelValue", emit);
         >
             <template #trigger>
                 <button
-                    class="relative w-full shadow-c-select rounded-full bg-white py-2 pl-3 pr-5 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-cl-main sm:text-sm"
+                    class="relative flex items-center w-full shadow-c-select rounded-full bg-white py-2 px-4 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-cl-main sm:text-sm"
                 >
-                    <span
-                        v-if="localValue"
-                        class="flex justify-center text-size_base text-cl-main font-semibold"
-                        >{{ localValue }}</span
-                    >
-                    <span
-                        v-else
-                        class="flex justify-center text-size_base text-cl-main font-semibold"
-                        >{{ placeholder }}</span
-                    >
-                    <span
-                        class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3.75"
-                    >
+                    <div class="w-full whitespace-nowrap overflow-auto no-scrollbar">
+                        <span
+                            v-if="localValue"
+                            class="w-full inline-block text-center text-size_base text-cl-main font-semibold"
+                            >{{ itemName(localValue) }}</span
+                        >
+                        <span
+                            v-else
+                            class="w-full inline-block text-center text-size_base text-cl-main font-semibold"
+                            >{{ placeholder }}</span
+                        >
+                    </div>
+                    <span class="pointer-events-none ml-auto">
                         <ChevronDownIcon class="h-5 w-5 text-cl-main" aria-hidden="true" />
                     </span>
                 </button>
@@ -60,5 +68,13 @@ const localValue = useSyncProps<string>(props, "modelValue", emit);
 .dp__theme_light {
     --dp-primary-color: #7f19d2;
     --dp-highlight-color: rgba(167, 25, 210, 0.1);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
 }
 </style>

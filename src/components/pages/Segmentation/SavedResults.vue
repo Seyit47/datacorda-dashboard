@@ -16,9 +16,7 @@ defineEmits(["select"]);
 <template>
     <div class="w-full">
         <div class="flex flex-col w-full h-full">
-            <div
-                class="flex items-center rounded-t-[10px] border px-5 py-2.5 bg-gradient-to-b from-[#35275E] to-[#D9D9D900]"
-            >
+            <div class="flex items-center rounded-t-[10px] border px-10 py-3 bg-cl-main">
                 <span class="text-[2rem] text-white">Saved Results</span>
             </div>
             <div

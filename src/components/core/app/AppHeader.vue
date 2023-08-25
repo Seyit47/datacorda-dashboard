@@ -70,13 +70,13 @@ function moveLine() {
                         <IconAnalytics />
                     </div>
                     <span
-                        class="text-size_20/16 font-bold transition-colors duration-150"
+                        class="leading-none text-[1.8rem] font-bold transition-colors duration-150"
                         :class="{
                             'text-cl-main group-hover:text-white':
                                 !$route.path.includes('analytics'),
                             'text-cl-purple': $route.path.includes('analytics'),
                         }"
-                        >ANALYTICS</span
+                        >Analytics</span
                     >
                 </NuxtLink>
             </div>
@@ -102,7 +102,7 @@ function moveLine() {
                         <IconModel />
                     </div>
                     <span
-                        class="text-size_20/16 font-bold transition-colors duration-150"
+                        class="leading-none text-[1.8rem] font-bold transition-colors duration-150"
                         :class="{
                             'text-cl-main group-hover:text-white': !$route.path.includes('model'),
                             'text-cl-purple': $route.path.includes('model'),
@@ -122,11 +122,6 @@ function moveLine() {
                     class="px-3.75 py-4 rounded-[20px] bg-cl-main text-size_18/16 text-white font-bold uppercase"
                 >
                     {{ user?.username.slice(0, 1) }}{{ user?.username.slice(-1) }}
-                </div>
-                <div
-                    class="px-3.75 py-4 rounded-[20px] border bg-cl-main text-size_18/16 text-white font-bold"
-                >
-                    Speed runner
                 </div>
             </div>
         </div>

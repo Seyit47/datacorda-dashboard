@@ -82,7 +82,7 @@ await fetchRequests();
                             :current-id="currentId"
                             @select="fetchSegmentation"
                         />
-                        <SegmentationCodeBlock />
+                        <SegmentationCodeBlock v-if="currentId" :segmentation-id="currentId" />
                     </div>
                 </div>
             </div>

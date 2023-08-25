@@ -27,8 +27,7 @@ const platformList = ref([
 
 const filter = reactive<any>({
     platform: null,
-    start: null,
-    end: null,
+    range: null,
 });
 
 const churnRetentionFilter = reactive<any>({
@@ -70,6 +69,17 @@ async function fetchRequests() {
         churnRetentionFilter.target = route.query.target;
     } else {
         query.append("target", "churn1");
+    }
+
+    if (route.query.platform) {
+        query.append("start", `${route.query.platform}`);
+        filter.platform = route.query.platform;
+    }
+
+    if (route.query.start && route.query.end) {
+        query.append("start", `${route.query.start}`);
+        query.append("end", `${route.query.end}`);
+        filter.range = [route.query.start, route.query.end];
     }
 
     const response = await Promise.all([
@@ -142,6 +152,31 @@ watch(
                 feature: churnRetentionFilter.feature || undefined,
                 featureType: churnRetentionFilter.featureType || undefined,
                 target: churnRetentionFilter.target || undefined,
+                platform: filter.platform || undefined,
+                start: filter.range ? filter.range[0] : undefined,
+                end: filter.range ? filter.range[1] : undefined,
+            },
+        });
+    },
+    {
+        deep: true,
+    }
+);
+
+watch(
+    filter,
+    () => {
+        const router = useRouter();
+
+        router.replace({
+            name: "analytics-dashboard",
+            query: {
+                feature: churnRetentionFilter.feature || undefined,
+                featureType: churnRetentionFilter.featureType || undefined,
+                target: churnRetentionFilter.target || undefined,
+                platform: filter.platform || undefined,
+                start: filter.range ? filter.range[0] : undefined,
+                end: filter.range ? filter.range[1] : undefined,
             },
         });
     },
@@ -163,7 +198,7 @@ await useAsyncData(() => fetchRequests());
         <BaseMaxContent class="px-6 py-8.75">
             <div class="flex flex-col gap-y-7.5 h-full">
                 <div class="flex items-center">
-                    <h2 class="text-[2.5rem] text-cl-main font-bold">Churn</h2>
+                    <h2 class="text-[2.5rem] text-cl-main font-bold">Churners vs Retainers</h2>
                     <div class="flex items-center gap-x-7.5 ml-auto">
                         <div class="w-42">
                             <BaseSelect
@@ -175,10 +210,12 @@ await useAsyncData(() => fetchRequests());
                             />
                         </div>
                         <div class="w-42">
-                            <BaseDatePicker v-model="filter.start" placeholder="Date" />
-                        </div>
-                        <div class="w-42">
-                            <BaseDatePicker v-model="filter.end" placeholder="Range" />
+                            <BaseDatePicker
+                                v-model="filter.range"
+                                :item-name="(item:string[]) => `${item[0]}/${item[1]}`"
+                                placeholder="Date Range"
+                                range
+                            />
                         </div>
                     </div>
                 </div>

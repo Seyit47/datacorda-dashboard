@@ -25,13 +25,11 @@ function copyToClipboard() {
 <template>
     <div class="w-full h-full">
         <div class="flex flex-col w-full h-full">
-            <div
-                class="flex items-center rounded-t-[10px] border px-5 py-2.5 bg-gradient-to-b from-[#35275E] to-[#D9D9D900]"
-            >
+            <div class="flex items-center rounded-t-[10px] border px-5 py-3 bg-cl-main">
                 <span class="text-[2rem] text-white">API</span>
 
                 <button
-                    class="w-8 ml-auto text-white hover:text-cl-main transition-colors duration-150"
+                    class="w-8 ml-auto text-white hover:text-cl-purple transition-colors duration-150"
                     @click="copyToClipboard"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 38" fill="none">
@@ -63,11 +61,6 @@ function copyToClipboard() {
 </template>
 
 <style lang="scss" scoped>
-.no-scrollbar:hover {
-    .no-scrollbar::-webkit-scrollbar {
-        display: block;
-    }
-}
 .no-scrollbar::-webkit-scrollbar {
     display: none;
 }

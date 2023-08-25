@@ -10,6 +10,10 @@ defineProps({
         type: String,
         default: "567767bf-65e0-4c08-80fe-3e2885f8dce8",
     },
+    segmentationId: {
+        type: String,
+        default: "",
+    },
 });
 
 const $toast = useToast();
@@ -25,13 +29,11 @@ function copyToClipboard() {
 <template>
     <div class="w-full">
         <div class="flex flex-col w-full h-full">
-            <div
-                class="flex items-center rounded-t-[10px] border px-5 py-2.5 bg-gradient-to-b from-[#35275E] to-[#D9D9D900]"
-            >
+            <div class="flex items-center rounded-t-[10px] border px-10 py-3 bg-cl-main">
                 <span class="text-[2rem] text-white">API</span>
 
                 <button
-                    class="w-8 ml-auto text-white hover:text-cl-main transition-colors duration-150"
+                    class="w-8 ml-auto text-white hover:text-cl-purple transition-colors duration-150"
                     @click="copyToClipboard"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 38" fill="none">
@@ -54,6 +56,8 @@ function copyToClipboard() {
                     <code ref="code" class="inline-block bg-[#F2F2F2] text-black p-4">
                         curl --location 'https://api.datacorda.com/prediction/{{ model }}?game_id={{
                             gameId
+                        }}&segmentation_id={{
+                            segmentationId
                         }}&user_pseudo_id=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
                     </code>
                 </div>

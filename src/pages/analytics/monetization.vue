@@ -21,8 +21,7 @@ const platformList = ref([
 
 const filter = reactive<any>({
     platform: null,
-    start: null,
-    end: null,
+    range: null,
 });
 
 const revenueList = ref([
@@ -62,10 +61,12 @@ const revenueList = ref([
                             />
                         </div>
                         <div class="w-42">
-                            <BaseDatePicker v-model="filter.start" placeholder="Date" />
-                        </div>
-                        <div class="w-42">
-                            <BaseDatePicker v-model="filter.end" placeholder="Range" />
+                            <BaseDatePicker
+                                v-model="filter.range"
+                                :item-name="(item:string[]) => `${item[0]}/${item[1]}`"
+                                placeholder="Date Range"
+                                range
+                            />
                         </div>
                     </div>
                 </div>

@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { truncateValue } from "@/utils";
+
 defineProps({
     data: {
         type: Object as PropType<any>,
@@ -33,7 +35,9 @@ defineProps({
                             <div
                                 class="flex flex-col justify-center items-center gap-y-1 w-full h-full"
                             >
-                                <span class="text-white">{{ data.true_positive_number }}</span>
+                                <span class="text-white">{{
+                                    truncateValue(data.true_positive_number)
+                                }}</span>
                                 <span class="text-white">True Positive</span>
                                 <span class="text-[2.5rem] text-white"
                                     >{{ data.true_positive_precision }}%</span
@@ -44,7 +48,9 @@ defineProps({
                             <div
                                 class="flex flex-col justify-center items-center gap-y-1 w-full h-full"
                             >
-                                <span class="text-white">{{ data.false_positive_number }}</span>
+                                <span class="text-white">{{
+                                    truncateValue(data.false_positive_number)
+                                }}</span>
                                 <span class="text-white">False Positive</span>
                                 <span class="text-[2.5rem] text-white"
                                     >{{ data.false_positive_precision }}%</span
@@ -57,7 +63,9 @@ defineProps({
                             <div
                                 class="flex flex-col justify-center items-center gap-y-1 w-full h-full"
                             >
-                                <span class="text-white">{{ data.false_negative_number }}</span>
+                                <span class="text-white">{{
+                                    truncateValue(data.false_negative_number)
+                                }}</span>
                                 <span class="text-white">False Negative</span>
                                 <span class="text-[2.5rem] text-white"
                                     >{{ data.false_negative_precision }}%</span
@@ -68,7 +76,9 @@ defineProps({
                             <div
                                 class="flex flex-col justify-center items-center gap-y-1 w-full h-full"
                             >
-                                <span class="text-white">{{ data.true_negative_number }}</span>
+                                <span class="text-white">{{
+                                    truncateValue(data.true_negative_number)
+                                }}</span>
                                 <span class="text-white">True Negative</span>
                                 <span class="text-[2.5rem] text-white"
                                     >{{ data.true_negative_precision }}%</span

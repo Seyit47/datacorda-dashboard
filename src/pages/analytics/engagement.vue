@@ -31,8 +31,7 @@ const platformList = ref([
 
 const filter = reactive<any>({
     platform: null,
-    start: null,
-    end: null,
+    range: null,
 });
 
 const dailyAdView = ref<any[]>([]);
@@ -45,11 +44,11 @@ watch(
     () => {
         const router = useRouter();
         router.replace({
-            name: "analytics",
+            name: "analytics-engagement",
             query: {
                 platform: filter.platform || undefined,
-                start: filter.start || undefined,
-                end: filter.end || undefined,
+                start: filter.range ? filter.range[0] : undefined,
+                end: filter.range ? filter.range[1] : undefined,
             },
         });
     },
@@ -67,14 +66,10 @@ async function fetchRequests() {
         filter.platform = route.query.platform;
     }
 
-    if (route.query.start) {
+    if (route.query.start && route.query.end) {
         query.append("start", `${route.query.start}`);
-        filter.start = route.query.start;
-    }
-
-    if (route.query.end) {
         query.append("end", `${route.query.end}`);
-        filter.end = route.query.end;
+        filter.range = [route.query.start, route.query.end];
     }
 
     const response = await Promise.all([
@@ -146,10 +141,12 @@ await fetchRequests();
                             />
                         </div>
                         <div class="w-42">
-                            <BaseDatePicker v-model="filter.start" placeholder="Date" />
-                        </div>
-                        <div class="w-42">
-                            <BaseDatePicker v-model="filter.end" placeholder="Range" />
+                            <BaseDatePicker
+                                v-model="filter.range"
+                                :item-name="(item:string[]) => `${item[0]}/${item[1]}`"
+                                placeholder="Date Range"
+                                range
+                            />
                         </div>
                     </div>
                 </div>

@@ -22,8 +22,7 @@ const modelList = ref<any[]>([]);
 
 const filter = reactive<any>({
     model: null,
-    start: null,
-    end: null,
+    range: null,
 });
 
 watch(
@@ -33,9 +32,9 @@ watch(
         router.replace({
             name: "model",
             query: {
-                platform: filter.platform || undefined,
-                start: filter.start || undefined,
-                end: filter.end || undefined,
+                model: filter.model || undefined,
+                start: filter.range ? filter.range[0] : undefined,
+                end: filter.range ? filter.range[1] : undefined,
             },
         });
     },
@@ -56,14 +55,10 @@ async function fetchRequests() {
         filter.model = route.query.model;
     }
 
-    if (route.query.start) {
+    if (route.query.start && route.query.end) {
         query.append("start", `${route.query.start}`);
-        filter.start = route.query.start;
-    }
-
-    if (route.query.end) {
         query.append("end", `${route.query.end}`);
-        filter.end = route.query.end;
+        filter.range = [route.query.start, route.query.end];
     }
 
     const response = await Promise.all([
@@ -142,10 +137,12 @@ await fetchRequests();
                             />
                         </div>
                         <div class="w-42">
-                            <BaseDatePicker v-model="filter.start" placeholder="Date" />
-                        </div>
-                        <div class="w-42">
-                            <BaseDatePicker v-model="filter.end" placeholder="Range" />
+                            <BaseDatePicker
+                                v-model="filter.range"
+                                :item-name="(item:string[]) => `${item[0]}/${item[1]}`"
+                                placeholder="Date Range"
+                                range
+                            />
                         </div>
                     </div>
                 </div>
@@ -165,7 +162,7 @@ await fetchRequests();
                         </div>
                     </div>
                     <div class="col-span-5">
-                        <ModelCodeBlock />
+                        <ModelCodeBlock :model="filter.model" />
                     </div>
                 </div>
                 <div class="grid grid-cols-12 gap-x-5">

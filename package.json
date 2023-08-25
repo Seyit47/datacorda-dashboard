@@ -66,6 +66,7 @@
     "d3-selection": "^3.0.0",
     "d3-transition": "^3.0.1",
     "date-fns": "^2.30.0",
+    "echarts": "^5.4.3",
     "gsap": "^3.12.2",
     "vee-validate": "^4.10.5",
     "vue-toastification": "^2.0.0-rc.5",
