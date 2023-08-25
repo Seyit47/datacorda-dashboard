@@ -48,29 +48,6 @@ html {
     }
 }
 
-html {
-    @media (hover) {
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #bbb;
-            border-radius: 3px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            border-radius: 3px;
-            background-color: #ae5ac3;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background-color: #ae5ac3;
-        }
-    }
-}
-
 /* width */
 
 .m-outline-white {

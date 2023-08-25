@@ -16,6 +16,13 @@ export default defineNuxtConfig({
                     changeOrigin: true,
                     rewrite: (path) => path.replace(/^\/api/, ""),
                 },
+                "/s3-api": {
+                    target:
+                        process.env.S3_API_URL ||
+                        "https://4rz544nea7.execute-api.eu-central-1.amazonaws.com",
+                    changeOrigin: true,
+                    rewrite: (path) => path.replace(/^\/s3-api/, "api"),
+                },
             },
         },
     },
@@ -33,6 +40,22 @@ export default defineNuxtConfig({
         typeCheck: true,
     },
 
+    pwa: {
+        registerType: "autoUpdate",
+        srcDir: "",
+        filename: "service-worker.ts",
+        strategies: "injectManifest",
+        manifest: false,
+        injectRegister: false,
+        injectManifest: {
+            injectionPoint: undefined,
+        },
+        devOptions: {
+            enabled: true,
+            type: "module",
+        },
+    },
+
     css: ["@/assets/scss/style.scss"],
 
     modules: [
@@ -40,6 +63,7 @@ export default defineNuxtConfig({
         "@pinia-plugin-persistedstate/nuxt",
         "@nuxtjs/tailwindcss",
         "@vueuse/nuxt",
+        "@vite-pwa/nuxt",
         "nuxt-headlessui",
     ],
 
@@ -61,6 +85,6 @@ export default defineNuxtConfig({
     },
 
     build: {
-        transpile: ["gsap", "vue-toastification"],
+        transpile: ["gsap", "vue-toastification", "vue-datepicker"],
     },
 });

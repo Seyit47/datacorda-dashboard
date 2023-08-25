@@ -66,7 +66,7 @@ function evaluatePaddings() {
 
 <template>
     <div
-        class="px-1 transition-all"
+        class="px-1 transition-all w-full"
         :class="{
             'pb-3': !noError && errors,
         }"

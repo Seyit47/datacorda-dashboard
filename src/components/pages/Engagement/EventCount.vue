@@ -2,35 +2,31 @@
 import { Chart } from "chart.js/auto";
 
 const props = defineProps({
-    sessionNumber: {
+    eventCount: {
         type: Array as PropType<any[]>,
         default: () => [],
     },
 });
 
-const { sessionNumber } = toRefs(props);
+const { eventCount } = toRefs(props);
+
+const chart = ref<any>(null);
 
 const barChart = ref<HTMLCanvasElement | null>(null);
 
 function initChart() {
-    const sortedData = sessionNumber.value.sort(
-        (a, b) => Number(new Date(a.date)) - Number(new Date(b.date))
-    );
-
-    const countries = sortedData.map((entry) => entry.date);
-    const users = sortedData.map((entry) => +entry.count);
+    const countries = eventCount.value.map((entry) => entry.event_name);
+    const users = eventCount.value.map((entry) => entry.count);
 
     const ctx = barChart.value as HTMLCanvasElement;
 
     const canvas = ctx.getContext("2d") as CanvasRenderingContext2D;
 
-    const gradient = canvas.createLinearGradient(0, 0, 0, 300);
+    const gradient = canvas.createLinearGradient(300, 0, 0, 0);
     gradient.addColorStop(0, "rgb(53, 39, 94)");
     gradient.addColorStop(1, "rgb(154, 73, 174)");
 
-    Chart.defaults.color = gradient;
-
-    return new Chart(ctx, {
+    chart.value = new Chart(ctx, {
         type: "bar",
         data: {
             labels: countries,
@@ -44,6 +40,7 @@ function initChart() {
             ],
         },
         options: {
+            indexAxis: "y",
             responsive: true,
             plugins: {
                 legend: {
@@ -57,6 +54,9 @@ function initChart() {
                         drawOnChartArea: false,
                     },
                     ticks: {
+                        font: {
+                            size: window.innerWidth > 1280 ? 9 : 6,
+                        },
                         autoSkip: false,
                     },
                 },
@@ -77,23 +77,28 @@ function initChart() {
 }
 
 onMounted(() => {
-    if (barChart.value) {
-        const chart = initChart();
+    initChart();
+});
 
-        onBeforeUnmount(() => {
-            chart.destroy();
-        });
+onBeforeUnmount(() => {
+    barChart.value = null;
+
+    if (!chart.value) {
+        return;
     }
+
+    chart.value.destroy();
+    chart.value = null;
 });
 </script>
 
 <template>
     <div class="flex flex-col justify-center gap-y-5 h-full">
         <h2
-            class="text-[1.5rem] font-bold text-transparent bg-clip-text bg-gradient-to-t from-cl-purple to-cl-main"
+            class="text-[1.2rem] font-bold text-transparent bg-clip-text bg-gradient-to-t from-cl-purple to-cl-main"
         >
-            Number of Sessions
+            Event Count by Event Name
         </h2>
-        <canvas ref="barChart" v-bind="$attrs" class="h-full"></canvas>
+        <canvas ref="barChart" v-bind="$attrs" style="height: 100%; width: 100%"></canvas>
     </div>
 </template>

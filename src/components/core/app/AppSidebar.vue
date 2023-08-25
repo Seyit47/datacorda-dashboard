@@ -42,7 +42,7 @@ async function logout() {
                         :to="{
                             name: item.name,
                         }"
-                        class="group flex items-center gap-x-3.75 py-3.75 px-8.75 border-cl-purple-light transition-all duration-150"
+                        class="group flex items-center gap-x-5 py-3.75 pl-8.75 border-cl-purple-light transition-all duration-150"
                         :class="{
                             'bg-gradient-to-b from-cl-purple-to via-cl-purple-to/70 to-cl-purple-to/50 border-r-6':
                                 $route.name === item.name,
@@ -53,20 +53,20 @@ async function logout() {
                         <div class="w-8.75 text-white">
                             <component :is="item.icon"></component>
                         </div>
-                        <span class="text-size_20/16 text-white">{{ item.label }}</span>
+                        <span class="text-size_20/16 font-bold text-white">{{ item.label }}</span>
                     </NuxtLink>
                 </li>
             </ul>
 
             <div class="mt-auto pb-6">
                 <button
-                    class="group flex items-center w-full gap-x-3.75 hover:bg-gradient-to-b from-cl-purple-to via-cl-purple-to/70 to-cl-purple-to/50 py-3.75 px-8.75 transition-colors duration-150"
+                    class="group flex items-center w-full gap-x-5 hover:bg-gradient-to-b from-cl-purple-to via-cl-purple-to/70 to-cl-purple-to/50 py-3.75 px-8.75 transition-colors duration-150"
                     @click="logout"
                 >
                     <div class="w-8.75 text-white">
                         <IconLogout />
                     </div>
-                    <span class="text-size_20/16 text-white">Logout</span>
+                    <span class="text-size_20/16 font-bold text-white">Log Out</span>
                 </button>
             </div>
         </div>

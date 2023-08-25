@@ -70,13 +70,13 @@ function moveLine() {
                         <IconAnalytics />
                     </div>
                     <span
-                        class="text-size_20/16 font-bold transition-colors duration-150"
+                        class="leading-none text-[1.8rem] font-bold transition-colors duration-150"
                         :class="{
                             'text-cl-main group-hover:text-white':
                                 !$route.path.includes('analytics'),
                             'text-cl-purple': $route.path.includes('analytics'),
                         }"
-                        >ANALYTICS</span
+                        >Analytics</span
                     >
                 </NuxtLink>
             </div>
@@ -87,7 +87,7 @@ function moveLine() {
                     :to="{
                         name: 'model',
                     }"
-                    class="group flex items-center gap-x-2.5 px-6 py-3.75 rounded-xl"
+                    class="group flex justify-center items-center gap-x-2.5 px-6 py-3.75 min-w-46 rounded-xl"
                     :class="{
                         'hover:bg-cl-main': !$route.path.includes('model'),
                     }"
@@ -102,12 +102,12 @@ function moveLine() {
                         <IconModel />
                     </div>
                     <span
-                        class="text-size_20/16 font-bold transition-colors duration-150"
+                        class="leading-none text-[1.8rem] font-bold transition-colors duration-150"
                         :class="{
                             'text-cl-main group-hover:text-white': !$route.path.includes('model'),
                             'text-cl-purple': $route.path.includes('model'),
                         }"
-                        >MODEL</span
+                        >AI</span
                     >
                 </NuxtLink>
             </div>
@@ -122,11 +122,6 @@ function moveLine() {
                     class="px-3.75 py-4 rounded-[20px] bg-cl-main text-size_18/16 text-white font-bold uppercase"
                 >
                     {{ user?.username.slice(0, 1) }}{{ user?.username.slice(-1) }}
-                </div>
-                <div
-                    class="px-3.75 py-4 rounded-[20px] border bg-cl-main text-size_18/16 text-white font-bold"
-                >
-                    Speed runner
                 </div>
             </div>
         </div>
