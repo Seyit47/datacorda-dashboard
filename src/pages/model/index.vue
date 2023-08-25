@@ -21,7 +21,7 @@ const { accessToken } = storeToRefs(authStore);
 const modelList = ref<any[]>([]);
 
 const filter = reactive<any>({
-    model: null,
+    model: "churn",
     range: null,
 });
 
@@ -63,8 +63,18 @@ async function fetchRequests() {
 
     const response = await Promise.all([
         $fetch(
+            `
+        ${$config.public.BACKEND_URL}/game/models/567767bf-65e0-4c08-80fe-3e2885f8dce8`,
+            {
+                method: "GET",
+                headers: {
+                    authorization: `Bearer ${accessToken.value}`,
+                },
+            }
+        ),
+        $fetch(
             `${$config.public.BACKEND_URL}/ai/feature-importance/${
-                filter.model
+                route.query.model || "churn"
             }?game_id=567767bf-65e0-4c08-80fe-3e2885f8dce8&${query.toString()}`,
             {
                 method: "GET",
@@ -75,7 +85,7 @@ async function fetchRequests() {
         ),
         $fetch(
             `${$config.public.BACKEND_URL}/prediction/analytics/${
-                filter.model
+                route.query.model || "churn"
             }?game_id=567767bf-65e0-4c08-80fe-3e2885f8dce8&${query.toString()}`,
             {
                 method: "GET",
@@ -86,7 +96,7 @@ async function fetchRequests() {
         ),
         $fetch(
             `${$config.public.BACKEND_URL}/ai/model-performance/${
-                filter.model
+                route.query.model || "churn"
             }?game_id=567767bf-65e0-4c08-80fe-3e2885f8dce8&${query.toString()}`,
             {
                 method: "GET",
@@ -97,28 +107,12 @@ async function fetchRequests() {
         ),
     ]);
 
-    featureImportance.value = response[0] as any[];
-    predictionAnalytics.value = response[1];
-    modelPerformance.value = response[2];
+    modelList.value = response[0] as any[];
+    featureImportance.value = response[1] as any[];
+    predictionAnalytics.value = response[2];
+    modelPerformance.value = response[3];
 }
 
-async function fetchModelList() {
-    const response = await $fetch(
-        `
-        ${$config.public.BACKEND_URL}/game/models/567767bf-65e0-4c08-80fe-3e2885f8dce8`,
-        {
-            method: "GET",
-            headers: {
-                authorization: `Bearer ${accessToken.value}`,
-            },
-        }
-    );
-
-    modelList.value = response as any[];
-    filter.model = modelList.value[0];
-}
-
-await fetchModelList();
 await fetchRequests();
 </script>
 

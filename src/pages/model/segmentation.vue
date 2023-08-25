@@ -1,5 +1,7 @@
 <script lang="ts" setup>
 import { storeToRefs } from "pinia";
+import { useToast } from "vue-toastification";
+import ModalConfirm from "@/components/core/app/ModalConfirm/Wrapper.vue";
 import BaseMaxContent from "@/components/core/base/BaseMaxContent.vue";
 import SegmentForm from "@/components/pages/Segmentation/SegmentForm.vue";
 import SavedResults from "@/components/pages/Segmentation/SavedResults.vue";
@@ -11,10 +13,14 @@ definePageMeta({
     layout: "model",
 });
 
+const $toast = useToast();
+
 const { $config } = useNuxtApp();
 
 const authStore = useAuthStore();
 const { accessToken } = storeToRefs(authStore);
+
+const modalConfirm = ref<any>(null);
 
 const currentId = ref("");
 const savedResults = ref<any[]>([]);
@@ -57,6 +63,27 @@ async function fetchSegmentation(id: string) {
     segmentationInstance.value = response[0];
 }
 
+async function onDeleteSegmentation(index: number) {
+    const id = savedResults.value[index].id;
+    const { isSubmit } = await modalConfirm.value.open(
+        "Are you really want to delete this segmentation?"
+    );
+
+    if (!isSubmit) {
+        return;
+    }
+
+    await $fetch(`${$config.public.BACKEND_URL}/segmentation/${id}`, {
+        method: "DELETE",
+        headers: {
+            authorization: `Bearer ${accessToken.value}`,
+        },
+    });
+
+    savedResults.value.splice(index, 1);
+    $toast.success("Segmentation deleted successfully!");
+}
+
 await fetchRequests();
 </script>
 
@@ -81,11 +108,17 @@ await fetchRequests();
                             :data="savedResults"
                             :current-id="currentId"
                             @select="fetchSegmentation"
+                            @delete="onDeleteSegmentation"
                         />
-                        <SegmentationCodeBlock v-if="currentId" :segmentation-id="currentId" />
+                        <SegmentationCodeBlock
+                            v-if="currentId"
+                            :model="segmentationInstance.model"
+                            :segmentation-id="currentId"
+                        />
                     </div>
                 </div>
             </div>
         </BaseMaxContent>
+        <ModalConfirm ref="modalConfirm" />
     </div>
 </template>

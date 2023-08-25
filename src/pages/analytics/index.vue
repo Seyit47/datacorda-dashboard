@@ -31,7 +31,7 @@ const platformList = ref([
 ]);
 
 const filter = reactive<any>({
-    platform: null,
+    platform: "ALL",
     range: null,
 });
 
@@ -168,6 +168,8 @@ await fetchRequests();
                                 :list="platformList"
                                 :item-name="(item: any) => item.name"
                                 :item-value="(item: any) => item.value"
+                                :init-item-name="(item: any) => item.name"
+                                :init-item-value="(item: any) => item.value"
                                 placeholder="Platform"
                             />
                         </div>

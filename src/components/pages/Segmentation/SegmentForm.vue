@@ -17,7 +17,7 @@ const props = defineProps({
 const { instance } = toRefs(props);
 
 const filter = reactive<any>({
-    model: null,
+    model: "churn",
     size: 2,
     range: null,
 });
@@ -26,12 +26,15 @@ watch(instance, () => {
     if (!instance.value) {
         segmentList.value = [];
         filter.size = 2;
-        fetchSegmentOrder();
+        fetchRequests();
         return;
     }
     segmentList.value = [];
+    filter.model = instance.value.model;
+    if (filter.size === instance.value.size) {
+        fetchRequests();
+    }
     filter.size = instance.value.size;
-    fetchSegmentOrder();
 });
 
 const $toast = useToast();
@@ -62,7 +65,7 @@ const emit = defineEmits(["refresh"]);
 watch(
     filter,
     () => {
-        fetchSegmentOrder();
+        fetchRequests();
     },
     {
         deep: true,
@@ -74,30 +77,10 @@ const { $config } = useNuxtApp();
 const authStore = useAuthStore();
 const { accessToken } = storeToRefs(authStore);
 
-async function fetchModelList() {
-    const response = await $fetch(
-        `
-        ${$config.public.BACKEND_URL}/game/models/567767bf-65e0-4c08-80fe-3e2885f8dce8`,
-        {
-            method: "GET",
-            headers: {
-                authorization: `Bearer ${accessToken.value}`,
-            },
-        }
-    );
-
-    modelList.value = response as any[];
-    filter.model = modelList.value[0];
-}
-
-async function fetchSegmentOrder() {
+async function fetchRequests() {
     isLoading.value = true;
     try {
         const query = new URLSearchParams();
-
-        if (filter.model) {
-            query.append("model", filter.model);
-        }
 
         if (filter.size) {
             query.append("size", filter.size);
@@ -108,20 +91,33 @@ async function fetchSegmentOrder() {
             query.append("end", filter.range[1]);
         }
 
-        const response = await $fetch(
-            `${$config.public.BACKEND_URL}/prediction/analytics/${
-                filter.model
-            }?game_id=567767bf-65e0-4c08-80fe-3e2885f8dce8&${query.toString()}`,
-            {
-                method: "GET",
-                headers: {
-                    authorization: `Bearer ${accessToken.value}`,
-                },
-            }
-        );
+        const response = await Promise.all([
+            $fetch(
+                `${$config.public.BACKEND_URL}/game/models/567767bf-65e0-4c08-80fe-3e2885f8dce8`,
+                {
+                    method: "GET",
+                    headers: {
+                        authorization: `Bearer ${accessToken.value}`,
+                    },
+                }
+            ),
+            $fetch(
+                `${$config.public.BACKEND_URL}/prediction/analytics/${
+                    filter.model
+                }?game_id=567767bf-65e0-4c08-80fe-3e2885f8dce8&${query.toString()}`,
+                {
+                    method: "GET",
+                    headers: {
+                        authorization: `Bearer ${accessToken.value}`,
+                    },
+                }
+            ),
+        ]);
+
+        modelList.value = response[0] as any[];
 
         if (instance.value) {
-            segmentList.value = (response as any[]).reduce((acc, curValue, curIndex) => {
+            segmentList.value = (response[1] as any[]).reduce((acc, curValue, curIndex) => {
                 const segment = {
                     name:
                         segmentList.value[curIndex] && segmentList.value[curIndex].name
@@ -137,7 +133,7 @@ async function fetchSegmentOrder() {
             return;
         }
 
-        segmentList.value = (response as any[]).reduce((acc, curValue, curIndex) => {
+        segmentList.value = (response[1] as any[]).reduce((acc, curValue, curIndex) => {
             const segment = {
                 name:
                     segmentList.value[curIndex] && segmentList.value[curIndex].name
@@ -187,7 +183,7 @@ async function submitForm() {
         emit("refresh");
         segmentList.value = [];
         filter.size = 2;
-        await fetchSegmentOrder();
+        await fetchRequests();
     } catch (error: any) {
         $toast.error(error.message);
     }
@@ -216,7 +212,7 @@ function onDelete(index: number) {
     filter.size -= 1;
 }
 
-await fetchModelList();
+await fetchRequests();
 </script>
 
 <template>
@@ -303,6 +299,7 @@ await fetchModelList();
                         <button
                             v-if="currentSegmentIndex !== index"
                             class="w-6 text-white"
+                            :disabled="isLoading"
                             @click="onSelect(index)"
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 23 22" fill="none">
@@ -327,7 +324,11 @@ await fetchModelList();
                                 />
                             </svg>
                         </button>
-                        <button class="w-8.5 text-white" @click="onDelete(index)">
+                        <button
+                            class="w-8.5 text-white"
+                            :disabled="isLoading"
+                            @click="onDelete(index)"
+                        >
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 37" fill="none">
                                 <path
                                     d="M9.99992 29.2917C9.99992 30.9875 11.4999 32.375 13.3333 32.375H26.6666C28.4999 32.375 29.9999 30.9875 29.9999 29.2917V13.875C29.9999 12.1792 28.4999 10.7917 26.6666 10.7917H13.3333C11.4999 10.7917 9.99992 12.1792 9.99992 13.875V29.2917ZM29.9999 6.16667H25.8333L24.6499 5.07208C24.3499 4.79458 23.9166 4.625 23.4833 4.625H16.5166C16.0833 4.625 15.6499 4.79458 15.3499 5.07208L14.1666 6.16667H9.99992C9.08325 6.16667 8.33325 6.86042 8.33325 7.70833C8.33325 8.55625 9.08325 9.25 9.99992 9.25H29.9999C30.9166 9.25 31.6666 8.55625 31.6666 7.70833C31.6666 6.86042 30.9166 6.16667 29.9999 6.16667Z"

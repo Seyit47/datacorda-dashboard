@@ -31,8 +31,8 @@ const depthList = ref([
 ]);
 
 const filter = reactive<any>({
-    model: null,
-    depth: null,
+    model: "churn",
+    depth: "depth3",
 });
 
 watch(
@@ -60,43 +60,39 @@ async function fetchRequests() {
     if (route.query.model) {
         filter.model = route.query.model;
     }
-
     if (route.query.depth) {
         filter.depth = route.query.depth;
     }
 
-    const response = await $fetch(
-        `/s3-api/decTree_567767bf-65e0-4c08-80fe-3e2885f8dce8_${route.query.model || "churn0"}_${
-            route.query.depth || "depth3"
-        }.json`,
-        {
-            method: "GET",
-            headers: {
-                authorization: `Bearer ${accessToken.value}`,
-            },
-            responseType: "json",
-        }
-    );
-
-    decisionTree.value = response;
-}
-
-async function fetchModelList() {
-    const response = await $fetch(
-        `
+    const response = await Promise.all([
+        $fetch(
+            `
         ${$config.public.BACKEND_URL}/game/models/567767bf-65e0-4c08-80fe-3e2885f8dce8`,
-        {
-            method: "GET",
-            headers: {
-                authorization: `Bearer ${accessToken.value}`,
-            },
-        }
-    );
+            {
+                method: "GET",
+                headers: {
+                    authorization: `Bearer ${accessToken.value}`,
+                },
+            }
+        ),
+        $fetch(
+            `/s3-api/decTree_567767bf-65e0-4c08-80fe-3e2885f8dce8_${
+                route.query.model || "churn0"
+            }_${route.query.depth || "depth3"}.json`,
+            {
+                method: "GET",
+                headers: {
+                    authorization: `Bearer ${accessToken.value}`,
+                },
+                responseType: "json",
+            }
+        ),
+    ]);
 
-    modelList.value = response as any[];
+    modelList.value = response[0] as any[];
+    decisionTree.value = response[1];
 }
 
-await fetchModelList();
 await fetchRequests();
 </script>
 

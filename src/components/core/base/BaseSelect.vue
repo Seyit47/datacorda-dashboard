@@ -60,6 +60,20 @@ function onInit() {
     }
 }
 
+watch(modelValue, (value) => {
+    const item = list.value.reduce((acc, curValue) => {
+        if (initItemValue.value(curValue) === value) {
+            return curValue;
+        }
+        return acc;
+    }, null);
+    if (!item) {
+        return;
+    }
+    localName.value = initItemName.value(item);
+    localValue.value = item;
+});
+
 function onUpdate(item: any) {
     localName.value = itemName.value(item);
     emit("update:modelValue", itemValue.value(item));

@@ -49,7 +49,7 @@ onMounted(() => {
                         position: "left",
                         verticalAlign: "middle",
                         align: "right",
-                        fontSize: 14,
+                        fontSize: "1rem",
                     },
 
                     leaves: {

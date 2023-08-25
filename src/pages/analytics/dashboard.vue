@@ -26,14 +26,14 @@ const platformList = ref([
 ]);
 
 const filter = reactive<any>({
-    platform: null,
+    platform: "ALL",
     range: null,
 });
 
 const churnRetentionFilter = reactive<any>({
-    feature: null,
-    featureType: null,
-    segmentation: null,
+    feature: "screen_view",
+    featureType: "numeric",
+    segmentation: "churn1",
 });
 
 const { $config } = useNuxtApp();
@@ -54,21 +54,18 @@ async function fetchRequests() {
         query.append("feature", `${route.query.feature}`);
         churnRetentionFilter.feature = route.query.feature;
     } else {
-        query.append("feature", "screen_view");
-        churnRetentionFilter.feature = "screen_view";
+        query.append("feature", `${churnRetentionFilter.feature}`);
     }
 
     if (route.query.featureType) {
         churnRetentionFilter.featureType = route.query.featureType;
-    } else {
-        churnRetentionFilter.featureType = "numeric";
     }
 
     if (route.query.target) {
         query.append("target", `${route.query.target}`);
-        churnRetentionFilter.target = route.query.target;
+        churnRetentionFilter.segmentation = route.query.target;
     } else {
-        query.append("target", "churn1");
+        query.append("target", `${churnRetentionFilter.segmentation}`);
     }
 
     if (route.query.platform) {
@@ -190,7 +187,7 @@ function updateFeature(item: any) {
     churnRetentionFilter.featureType = item.type;
 }
 
-await useAsyncData(() => fetchRequests());
+await fetchRequests();
 </script>
 
 <template>
@@ -206,6 +203,8 @@ await useAsyncData(() => fetchRequests());
                                 :list="platformList"
                                 :item-name="(item: any) => item.name"
                                 :item-value="(item: any) => item.value"
+                                :init-item-name="(item: any) => item.name"
+                                :init-item-value="(item: any) => item.value"
                                 placeholder="Platform"
                             />
                         </div>
