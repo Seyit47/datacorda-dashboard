@@ -76,7 +76,7 @@ async function fetchRequests() {
             }
         ),
         $fetch(
-            `/s3-api/decTree_567767bf-65e0-4c08-80fe-3e2885f8dce8_${
+            `${$config.public.S3_API_URL}/decTree_567767bf-65e0-4c08-80fe-3e2885f8dce8_${
                 route.query.model || "churn0"
             }_${route.query.depth || "depth3"}.json`,
             {

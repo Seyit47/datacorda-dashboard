@@ -31,6 +31,7 @@ export default defineNuxtConfig({
         public: {
             LANDING_PAGE_URL: process.env.LANDING_PAGE_URL,
             BACKEND_URL: process.env.BACKEND_URL,
+            S3_API_URL: process.env.S3_API_URL,
         },
     },
 
