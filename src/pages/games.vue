@@ -14,6 +14,7 @@ const { accessToken } = storeToRefs(authStore);
 
 const gameStore = useGameStore();
 const { setGame, setGameId } = gameStore;
+const { game, gameId } = storeToRefs(gameStore);
 
 const toast = useToast();
 
@@ -64,6 +65,15 @@ const { value: name } = useField<string>("name");
 const gameList = ref<ApiGame[]>([]);
 
 async function fetchRequests() {
+    if (game.value && gameId.value) {
+        currentGame.value = {
+            id: gameId.value,
+            game_name: game.value.game_name,
+            project_id: game.value.project_id,
+            analytics_ready: game.value.analytics_ready,
+            model_ready: game.value.model_ready,
+        };
+    }
     const response = await $fetch<ApiGame[]>(`${$config.public.BACKEND_URL}/game-list`, {
         method: "GET",
         headers: {

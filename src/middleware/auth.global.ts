@@ -10,14 +10,13 @@ export default defineNuxtRouteMiddleware((to) => {
     const { gameId } = storeToRefs(gameStore);
 
     if (to.name === "login" || accessToken.value) {
-        if (to.name === "games" || gameId.value) {
-            return;
+        if (accessToken.value && !gameId.value && to.name !== "games") {
+            return navigateTo({
+                name: "games",
+                replace: true,
+            });
         }
-
-        return navigateTo({
-            name: "games",
-            replace: true,
-        });
+        return;
     }
 
     return navigateTo({
