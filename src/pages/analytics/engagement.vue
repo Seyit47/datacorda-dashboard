@@ -8,11 +8,15 @@ import EventCount from "@/components/pages/Engagement/EventCount.vue";
 import RetentionTable from "@/components/pages/Engagement/RetentionTable.vue";
 import DailyRetention from "@/components/pages/Engagement/DailyRetention.vue";
 import { useAuthStore } from "@/store/auth";
+import { useGameStore } from "~/store/game";
 
 const { $config } = useNuxtApp();
 
 const authStore = useAuthStore();
 const { accessToken } = storeToRefs(authStore);
+const gameStore = useGameStore();
+const { isAnalyticsReady } = gameStore;
+const { gameId } = storeToRefs(gameStore);
 
 const platformList = ref([
     {
@@ -58,6 +62,9 @@ watch(
 );
 
 async function fetchRequests() {
+    if (!isAnalyticsReady) {
+        return;
+    }
     const route = useRoute();
     const query = new URLSearchParams();
 
@@ -74,9 +81,9 @@ async function fetchRequests() {
 
     const response = await Promise.all([
         $fetch(
-            `${
-                $config.public.BACKEND_URL
-            }/dashboard/daily-ad-view/567767bf-65e0-4c08-80fe-3e2885f8dce8?${query.toString()}`,
+            `${$config.public.BACKEND_URL}/dashboard/daily-ad-view/${
+                gameId.value
+            }?${query.toString()}`,
             {
                 method: "GET",
                 headers: {
@@ -85,9 +92,9 @@ async function fetchRequests() {
             }
         ),
         $fetch(
-            `${
-                $config.public.BACKEND_URL
-            }/dashboard/event-count-by-eventname/567767bf-65e0-4c08-80fe-3e2885f8dce8?${query.toString()}`,
+            `${$config.public.BACKEND_URL}/dashboard/event-count-by-eventname/${
+                gameId.value
+            }?${query.toString()}`,
             {
                 method: "GET",
                 headers: {
@@ -95,24 +102,18 @@ async function fetchRequests() {
                 },
             }
         ),
-        $fetch(
-            `${$config.public.BACKEND_URL}/dashboard/daily-retention/567767bf-65e0-4c08-80fe-3e2885f8dce8`,
-            {
-                method: "GET",
-                headers: {
-                    authorization: `Bearer ${accessToken.value}`,
-                },
-            }
-        ),
-        $fetch(
-            `${$config.public.BACKEND_URL}/dashboard/daily-d1-retention/567767bf-65e0-4c08-80fe-3e2885f8dce8`,
-            {
-                method: "GET",
-                headers: {
-                    authorization: `Bearer ${accessToken.value}`,
-                },
-            }
-        ),
+        $fetch(`${$config.public.BACKEND_URL}/dashboard/daily-retention/${gameId.value}`, {
+            method: "GET",
+            headers: {
+                authorization: `Bearer ${accessToken.value}`,
+            },
+        }),
+        $fetch(`${$config.public.BACKEND_URL}/dashboard/daily-d1-retention/${gameId.value}`, {
+            method: "GET",
+            headers: {
+                authorization: `Bearer ${accessToken.value}`,
+            },
+        }),
     ]);
 
     dailyAdView.value = response[0] as any[];
@@ -170,12 +171,21 @@ await fetchRequests();
                     <div class="grid grid-cols-[repeat(15,minmax(0,1fr))] gap-x-3">
                         <div class="col-span-8">
                             <div class="rounded-[20px] shadow-lg border p-6">
-                                <div class="relative 3xl:pt-[45%] pt-[44.7%]">
+                                <div
+                                    v-if="isAnalyticsReady"
+                                    class="relative 3xl:pt-[45%] pt-[44.7%]"
+                                >
                                     <div
                                         class="absolute top-0 left-0 w-full h-full overflow-y-scroll"
                                     >
                                         <RetentionTable :list="retentionTable" />
                                     </div>
+                                </div>
+                                <div
+                                    v-else
+                                    class="flex justify-center items-center aspect-[16/7] w-full h-full text-[1.5rem] text-cl-main"
+                                >
+                                    No data
                                 </div>
                             </div>
                         </div>

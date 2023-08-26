@@ -1,6 +1,10 @@
 <!-- eslint-disable import/namespace -->
 <script lang="ts" setup>
 import * as echarts from "echarts";
+import { useGameStore } from "@/store/game";
+
+const gameStore = useGameStore();
+const { isModelReady } = gameStore;
 
 const props = defineProps({
     decisionTree: {
@@ -12,6 +16,9 @@ const props = defineProps({
 const { decisionTree } = toRefs(props);
 
 onMounted(() => {
+    if (!isModelReady) {
+        return;
+    }
     type EChartsOption = echarts.EChartsOption;
 
     const chartDom = document.getElementById("main")!;
@@ -83,6 +90,13 @@ onMounted(() => {
         >
             Decision Tree
         </h2>
-        <div id="main" class="w-full h-full"></div>
+        <div v-if="isModelReady" id="main" class="w-full h-full"></div>
+
+        <div
+            v-else
+            class="flex justify-center items-center w-full h-full text-[1.5rem] text-cl-main"
+        >
+            No data
+        </div>
     </div>
 </template>

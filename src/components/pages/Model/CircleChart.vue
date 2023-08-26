@@ -1,5 +1,9 @@
 <script lang="ts" setup>
 import { getValueFromPercetage } from "@/utils";
+import { useGameStore } from "@/store/game";
+
+const gameStore = useGameStore();
+const { isModelReady } = gameStore;
 
 defineProps({
     data: {
@@ -21,7 +25,7 @@ function truncateValue(value: number) {
 
 <template>
     <div class="flex">
-        <div class="w-[62%]">
+        <div v-if="isModelReady" class="w-[62%]">
             <div class="relative pt-[100%]">
                 <div class="absolute top-0 left-0 w-full h-full">
                     <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
@@ -137,6 +141,13 @@ function truncateValue(value: number) {
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div
+            v-else
+            class="flex justify-center items-center aspect-[19/9] w-full h-full text-[1.5rem] text-cl-main"
+        >
+            No data
         </div>
     </div>
 </template>

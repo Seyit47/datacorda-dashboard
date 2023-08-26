@@ -6,8 +6,8 @@ import BaseMaxContent from "@/components/core/base/BaseMaxContent.vue";
 import SegmentForm from "@/components/pages/Segmentation/SegmentForm.vue";
 import SavedResults from "@/components/pages/Segmentation/SavedResults.vue";
 import SegmentationCodeBlock from "@/components/pages/Segmentation/CodeBlock.vue";
-
 import { useAuthStore } from "@/store/auth";
+import { useGameStore } from "@/store/game";
 
 definePageMeta({
     layout: "model",
@@ -19,6 +19,9 @@ const { $config } = useNuxtApp();
 
 const authStore = useAuthStore();
 const { accessToken } = storeToRefs(authStore);
+const gameStore = useGameStore();
+const { isModelReady } = gameStore;
+const { gameId } = storeToRefs(gameStore);
 
 const modalConfirm = ref<any>(null);
 
@@ -27,18 +30,18 @@ const savedResults = ref<any[]>([]);
 const segmentationInstance = ref<any>(null);
 
 async function fetchRequests() {
+    if (!isModelReady) {
+        return;
+    }
     currentId.value = "";
     segmentationInstance.value = null;
     const response = await Promise.all([
-        $fetch(
-            `${$config.public.BACKEND_URL}/segmentation-list/567767bf-65e0-4c08-80fe-3e2885f8dce8`,
-            {
-                method: "GET",
-                headers: {
-                    authorization: `Bearer ${accessToken.value}`,
-                },
-            }
-        ),
+        $fetch(`${$config.public.BACKEND_URL}/segmentation-list/${gameId.value}`, {
+            method: "GET",
+            headers: {
+                authorization: `Bearer ${accessToken.value}`,
+            },
+        }),
     ]);
 
     savedResults.value = response[0] as any[];

@@ -6,6 +6,10 @@ import BaseSelect from "@/components/core/base/BaseSelect.vue";
 import BaseDatePicker from "@/components/core/base/BaseDatePicker.vue";
 import { useAuthStore } from "@/store/auth";
 import { truncateValue } from "@/utils/index";
+import { useGameStore } from "@/store/game";
+
+const gameStore = useGameStore();
+const { isModelReady } = gameStore;
 
 const props = defineProps({
     instance: {
@@ -78,6 +82,11 @@ const authStore = useAuthStore();
 const { accessToken } = storeToRefs(authStore);
 
 async function fetchRequests() {
+    if (!isModelReady) {
+        $toast.error("Model is not ready yet!");
+        return;
+    }
+
     isLoading.value = true;
     try {
         const query = new URLSearchParams();
@@ -151,6 +160,11 @@ async function fetchRequests() {
 }
 
 async function submitForm() {
+    if (!isModelReady) {
+        $toast.error("Model is not ready yet!");
+        return;
+    }
+
     try {
         const { isSubmit, data } = await modal.value.open(instance.value);
         if (!isSubmit) {
