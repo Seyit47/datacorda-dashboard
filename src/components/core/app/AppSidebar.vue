@@ -1,7 +1,4 @@
 <script lang="ts" setup>
-import IconLogout from "@/components/icons/IconLogout.vue";
-import { useAuthStore } from "~/store/auth";
-
 defineOptions({
     name: "AppSidebar",
 });
@@ -12,20 +9,6 @@ defineProps({
         default: () => [],
     },
 });
-
-async function logout() {
-    const authStore = useAuthStore();
-
-    const { setUser, setAccessToken } = authStore;
-
-    setUser(null);
-    setAccessToken(null);
-
-    await navigateTo({
-        name: "login",
-        replace: true,
-    });
-}
 </script>
 
 <template>
@@ -57,18 +40,6 @@ async function logout() {
                     </NuxtLink>
                 </li>
             </ul>
-
-            <div class="mt-auto pb-6">
-                <button
-                    class="group flex items-center w-full gap-x-5 hover:bg-gradient-to-b from-cl-purple-to via-cl-purple-to/70 to-cl-purple-to/50 py-3.75 px-8.75 transition-colors duration-150"
-                    @click="logout"
-                >
-                    <div class="w-8.75 text-white">
-                        <IconLogout />
-                    </div>
-                    <span class="text-size_20/16 font-bold text-white">Log Out</span>
-                </button>
-            </div>
         </div>
     </div>
 </template>

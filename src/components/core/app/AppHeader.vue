@@ -118,11 +118,12 @@ function moveLine() {
         <div class="ml-auto pr-2.5">
             <div class="flex items-center gap-x-6">
                 <span class="text-size_18/16">{{ user?.username }}</span>
-                <div
+                <!-- <div
                     class="px-3.75 py-4 rounded-[20px] bg-cl-main text-size_18/16 text-white font-bold uppercase"
                 >
                     {{ user?.username.slice(0, 1) }}{{ user?.username.slice(-1) }}
-                </div>
+                </div> -->
+                <UserProfile />
             </div>
         </div>
     </div>

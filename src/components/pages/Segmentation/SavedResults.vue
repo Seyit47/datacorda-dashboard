@@ -1,4 +1,9 @@
 <script lang="ts" setup>
+import { useGameStore } from "@/store/game";
+
+const gameStore = useGameStore();
+const { isModelReady } = gameStore;
+
 defineProps({
     data: {
         type: Array as PropType<any[]>,
@@ -20,6 +25,7 @@ defineEmits(["select", "delete"]);
                 <span class="text-[2rem] text-white">Saved Results</span>
             </div>
             <div
+                v-if="isModelReady"
                 class="flex flex-col gap-y-2.5 border-l border-r border-b rounded-b-[10px] h-full overflow-hidden p-6"
             >
                 <div class="flex items-center">
@@ -101,6 +107,13 @@ defineEmits(["select", "delete"]);
                         </button>
                     </div>
                 </div>
+            </div>
+
+            <div
+                v-else
+                class="flex justify-center items-center aspect-[19/9] border-l border-b border-r rounded-b-[10px] w-full h-full text-[1.5rem] text-cl-main"
+            >
+                No data
             </div>
         </div>
     </div>

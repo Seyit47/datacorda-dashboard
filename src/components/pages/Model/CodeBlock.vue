@@ -1,5 +1,9 @@
 <script lang="ts" setup>
 import { useToast } from "vue-toastification";
+import { useGameStore } from "@/store/game";
+
+const gameStore = useGameStore();
+const { isModelReady } = gameStore;
 
 defineProps({
     model: {
@@ -24,7 +28,7 @@ function copyToClipboard() {
 
 <template>
     <div class="w-full h-full">
-        <div class="flex flex-col w-full h-full">
+        <div v-if="isModelReady" class="flex flex-col w-full h-full">
             <div class="flex items-center rounded-t-[10px] border px-5 py-3 bg-cl-main">
                 <span class="text-[2rem] text-white">API</span>
 
@@ -56,6 +60,13 @@ function copyToClipboard() {
                     </code>
                 </div>
             </div>
+        </div>
+
+        <div
+            v-else
+            class="flex justify-center items-center rounded-[20px] border shadow-md w-full h-full text-[1.5rem] text-cl-main"
+        >
+            No data
         </div>
     </div>
 </template>

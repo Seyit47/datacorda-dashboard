@@ -9,6 +9,7 @@ import ChurnVsRetention from "@/components/pages/Dashboard/ChurnVsRetention.vue"
 import ChurnVsRetentionCategoric from "@/components/pages/Dashboard/ChurnVsRetentionCategoric.vue";
 import LevelScore from "@/components/pages/Dashboard/LevelScore.vue";
 import { useAuthStore } from "@/store/auth";
+import { useGameStore } from "@/store/game";
 
 const platformList = ref([
     {
@@ -40,6 +41,9 @@ const { $config } = useNuxtApp();
 
 const authStore = useAuthStore();
 const { accessToken } = storeToRefs(authStore);
+const gameStore = useGameStore();
+const { isAnalyticsReady } = gameStore;
+const { gameId } = storeToRefs(gameStore);
 
 const funnelData = ref<any>(null);
 const levelFlow = ref<any[]>([]);
@@ -47,6 +51,9 @@ const churnRetention = ref<any[]>([]);
 const featureList = ref<any[]>([]);
 
 async function fetchRequests() {
+    if (!isAnalyticsReady) {
+        return;
+    }
     const route = useRoute();
     const query = new URLSearchParams();
 
@@ -80,8 +87,22 @@ async function fetchRequests() {
     }
 
     const response = await Promise.all([
+        $fetch(`${$config.public.BACKEND_URL}/dashboard/ftue-funnel/${gameId.value}`, {
+            method: "GET",
+            headers: {
+                authorization: `Bearer ${accessToken.value}`,
+            },
+        }),
+        $fetch(`${$config.public.BACKEND_URL}/dashboard/level-flow-d1/${gameId.value}`, {
+            method: "GET",
+            headers: {
+                authorization: `Bearer ${accessToken.value}`,
+            },
+        }),
         $fetch(
-            `${$config.public.BACKEND_URL}/dashboard/ftue-funnel/567767bf-65e0-4c08-80fe-3e2885f8dce8`,
+            `${$config.public.BACKEND_URL}/dashboard/distribution/${
+                gameId.value
+            }?${query.toString()}`,
             {
                 method: "GET",
                 headers: {
@@ -89,35 +110,12 @@ async function fetchRequests() {
                 },
             }
         ),
-        $fetch(
-            `${$config.public.BACKEND_URL}/dashboard/level-flow-d1/567767bf-65e0-4c08-80fe-3e2885f8dce8`,
-            {
-                method: "GET",
-                headers: {
-                    authorization: `Bearer ${accessToken.value}`,
-                },
-            }
-        ),
-        $fetch(
-            `${
-                $config.public.BACKEND_URL
-            }/dashboard/distribution/567767bf-65e0-4c08-80fe-3e2885f8dce8?${query.toString()}`,
-            {
-                method: "GET",
-                headers: {
-                    authorization: `Bearer ${accessToken.value}`,
-                },
-            }
-        ),
-        $fetch(
-            `${$config.public.BACKEND_URL}/dashboard/distribution-features/567767bf-65e0-4c08-80fe-3e2885f8dce8`,
-            {
-                method: "GET",
-                headers: {
-                    authorization: `Bearer ${accessToken.value}`,
-                },
-            }
-        ),
+        $fetch(`${$config.public.BACKEND_URL}/dashboard/distribution-features/${gameId.value}`, {
+            method: "GET",
+            headers: {
+                authorization: `Bearer ${accessToken.value}`,
+            },
+        }),
     ]);
 
     funnelData.value = response[0];

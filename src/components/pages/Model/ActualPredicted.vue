@@ -1,5 +1,9 @@
 <script lang="ts" setup>
 import { truncateValue } from "@/utils";
+import { useGameStore } from "@/store/game";
+
+const gameStore = useGameStore();
+const { isModelReady } = gameStore;
 
 defineProps({
     data: {
@@ -12,6 +16,7 @@ defineProps({
 <template>
     <div class="w-full h-full">
         <div
+            v-if="isModelReady"
             class="flex px-2.5 pt-5 pb-10 rounded-[20px] w-full h-full"
             style="
                 background: radial-gradient(
@@ -88,6 +93,19 @@ defineProps({
                     </div>
                 </div>
             </div>
+        </div>
+        <div
+            v-else
+            class="flex items-center justify-center px-2.5 pt-5 pb-10 rounded-[20px] text-[1.5rem] text-white w-full h-full"
+            style="
+                background: radial-gradient(
+                    104.58% 93.89% at 47.24% 55.41%,
+                    #35275e 47.78%,
+                    #803294 100%
+                );
+            "
+        >
+            No Data
         </div>
     </div>
 </template>

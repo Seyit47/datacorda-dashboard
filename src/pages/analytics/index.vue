@@ -9,11 +9,15 @@ import SessionNumber from "@/components/pages/Daily/SessionNumber.vue";
 import DailyChart from "@/components/pages/Daily/DailyChart.vue";
 import UserByCountry from "@/components/pages/Daily/UserByCountry.vue";
 import { useAuthStore } from "@/store/auth";
+import { useGameStore } from "~/store/game";
 
 const { $config } = useNuxtApp();
 
 const authStore = useAuthStore();
 const { accessToken } = storeToRefs(authStore);
+const gameStore = useGameStore();
+const { isAnalyticsReady } = gameStore;
+const { gameId } = storeToRefs(gameStore);
 
 const platformList = ref([
     {
@@ -61,6 +65,10 @@ watch(
 );
 
 async function fetchRequests() {
+    if (!isAnalyticsReady) {
+        return;
+    }
+
     const route = useRoute();
     const query = new URLSearchParams();
 
@@ -77,9 +85,9 @@ async function fetchRequests() {
 
     const response = await Promise.all([
         $fetch(
-            `${
-                $config.public.BACKEND_URL
-            }/dashboard/daily-active-user-number/567767bf-65e0-4c08-80fe-3e2885f8dce8?${query.toString()}`,
+            `${$config.public.BACKEND_URL}/dashboard/daily-active-user-number/${
+                gameId.value
+            }?${query.toString()}`,
             {
                 method: "GET",
                 headers: {
@@ -88,9 +96,9 @@ async function fetchRequests() {
             }
         ),
         $fetch(
-            `${
-                $config.public.BACKEND_URL
-            }/dashboard/daily-new-user-number/567767bf-65e0-4c08-80fe-3e2885f8dce8?${query.toString()}`,
+            `${$config.public.BACKEND_URL}/dashboard/daily-new-user-number/${
+                gameId.value
+            }?${query.toString()}`,
             {
                 method: "GET",
                 headers: {
@@ -99,9 +107,9 @@ async function fetchRequests() {
             }
         ),
         $fetch(
-            `${
-                $config.public.BACKEND_URL
-            }/dashboard/daily-session-number/567767bf-65e0-4c08-80fe-3e2885f8dce8?${query.toString()}`,
+            `${$config.public.BACKEND_URL}/dashboard/daily-session-number/${
+                gameId.value
+            }?${query.toString()}`,
             {
                 method: "GET",
                 headers: {
@@ -110,9 +118,9 @@ async function fetchRequests() {
             }
         ),
         $fetch(
-            `${
-                $config.public.BACKEND_URL
-            }/dashboard/user-insights/567767bf-65e0-4c08-80fe-3e2885f8dce8?${query.toString()}`,
+            `${$config.public.BACKEND_URL}/dashboard/user-insights/${
+                gameId.value
+            }?${query.toString()}`,
             {
                 method: "GET",
                 headers: {
@@ -121,9 +129,9 @@ async function fetchRequests() {
             }
         ),
         $fetch(
-            `${
-                $config.public.BACKEND_URL
-            }/dashboard/session-insights/567767bf-65e0-4c08-80fe-3e2885f8dce8?${query.toString()}`,
+            `${$config.public.BACKEND_URL}/dashboard/session-insights/${
+                gameId.value
+            }?${query.toString()}`,
             {
                 method: "GET",
                 headers: {
@@ -132,9 +140,9 @@ async function fetchRequests() {
             }
         ),
         $fetch(
-            `${
-                $config.public.BACKEND_URL
-            }/dashboard/user-per-country/567767bf-65e0-4c08-80fe-3e2885f8dce8?${query.toString()}`,
+            `${$config.public.BACKEND_URL}/dashboard/user-per-country/${
+                gameId.value
+            }?${query.toString()}`,
             {
                 method: "GET",
                 headers: {

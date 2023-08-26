@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import { Chart } from "chart.js/auto";
+import { useGameStore } from "@/store/game";
+
+const gameStore = useGameStore();
+const { isAnalyticsReady } = gameStore;
 
 const props = defineProps({
     data: {
@@ -104,6 +108,9 @@ function initChart() {
 }
 
 onMounted(() => {
+    if (!isAnalyticsReady) {
+        return;
+    }
     initChart();
 });
 
@@ -132,7 +139,7 @@ function numberToFixed(value: number, point: number) {
         >
             Retain 1 Funnel
         </h2>
-        <div class="relative w-full h-full border">
+        <div v-if="isAnalyticsReady" class="relative w-full h-full border">
             <canvas ref="barChart" v-bind="$attrs" style="height: 90%; width: 100%"></canvas>
             <div class="absolute top-0 left-0 w-full h-full">
                 <div class="grid grid-cols-5 divide-x h-full pt-1">
@@ -213,6 +220,12 @@ function numberToFixed(value: number, point: number) {
                     </div>
                 </div>
             </div>
+        </div>
+        <div
+            v-else
+            class="flex justify-center items-center aspect-[16/9] w-full h-full text-[1.5rem] text-cl-main"
+        >
+            No data
         </div>
     </div>
 </template>

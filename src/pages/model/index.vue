@@ -8,6 +8,7 @@ import ActualPredicted from "@/components/pages/Model/ActualPredicted.vue";
 import FeatureImportance from "@/components/pages/Model/FeatureImportance.vue";
 import ModelCodeBlock from "@/components/pages/Model/CodeBlock.vue";
 import { useAuthStore } from "@/store/auth";
+import { useGameStore } from "@/store/game";
 
 definePageMeta({
     layout: "model",
@@ -17,6 +18,9 @@ const { $config } = useNuxtApp();
 
 const authStore = useAuthStore();
 const { accessToken } = storeToRefs(authStore);
+const gameStore = useGameStore();
+const { isModelReady } = gameStore;
+const { gameId } = storeToRefs(gameStore);
 
 const modelList = ref<any[]>([]);
 
@@ -48,6 +52,9 @@ const predictionAnalytics = ref<any>(null);
 const modelPerformance = ref<any>(null);
 
 async function fetchRequests() {
+    if (!isModelReady) {
+        return;
+    }
     const route = useRoute();
     const query = new URLSearchParams();
 
@@ -64,7 +71,7 @@ async function fetchRequests() {
     const response = await Promise.all([
         $fetch(
             `
-        ${$config.public.BACKEND_URL}/game/models/567767bf-65e0-4c08-80fe-3e2885f8dce8`,
+        ${$config.public.BACKEND_URL}/game/models/${gameId.value}`,
             {
                 method: "GET",
                 headers: {
@@ -75,7 +82,7 @@ async function fetchRequests() {
         $fetch(
             `${$config.public.BACKEND_URL}/ai/feature-importance/${
                 route.query.model || "churn"
-            }?game_id=567767bf-65e0-4c08-80fe-3e2885f8dce8&${query.toString()}`,
+            }?game_id=${gameId.value}&${query.toString()}`,
             {
                 method: "GET",
                 headers: {
@@ -86,7 +93,7 @@ async function fetchRequests() {
         $fetch(
             `${$config.public.BACKEND_URL}/prediction/analytics/${
                 route.query.model || "churn"
-            }?game_id=567767bf-65e0-4c08-80fe-3e2885f8dce8&${query.toString()}`,
+            }?game_id=${gameId.value}&${query.toString()}`,
             {
                 method: "GET",
                 headers: {
@@ -97,7 +104,7 @@ async function fetchRequests() {
         $fetch(
             `${$config.public.BACKEND_URL}/ai/model-performance/${
                 route.query.model || "churn"
-            }?game_id=567767bf-65e0-4c08-80fe-3e2885f8dce8&${query.toString()}`,
+            }?game_id=${gameId.value}&${query.toString()}`,
             {
                 method: "GET",
                 headers: {
@@ -143,10 +150,18 @@ await fetchRequests();
                 <div class="grid grid-cols-12 gap-x-5">
                     <div class="col-span-7 flex flex-col gap-y-7.5">
                         <div class="grid grid-cols-12 p-6">
-                            <div class="col-span-8">
+                            <div
+                                :class="{
+                                    'col-span-8': isModelReady,
+                                    'col-span-12': !isModelReady,
+                                }"
+                            >
                                 <CircleChart :data="predictionAnalytics" />
                             </div>
-                            <div class="col-span-4 flex flex-col items-end justify-center">
+                            <div
+                                v-if="isModelReady"
+                                class="col-span-4 flex flex-col items-end justify-center"
+                            >
                                 <h2
                                     class="text-[2.5rem] text-transparent bg-clip-text bg-gradient-to-t from-cl-purple to-cl-main"
                                 >

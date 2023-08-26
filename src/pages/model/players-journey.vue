@@ -4,6 +4,7 @@ import BaseMaxContent from "@/components/core/base/BaseMaxContent.vue";
 import BaseSelect from "@/components/core/base/BaseSelect.vue";
 import DecisionTree from "@/components/pages/PlayersJourney/DecisionTree.vue";
 import { useAuthStore } from "@/store/auth";
+import { useGameStore } from "@/store/game";
 
 definePageMeta({
     layout: "model",
@@ -13,6 +14,9 @@ const { $config } = useNuxtApp();
 
 const authStore = useAuthStore();
 const { accessToken } = storeToRefs(authStore);
+const gameStore = useGameStore();
+const { isModelReady } = gameStore;
+const { gameId } = storeToRefs(gameStore);
 
 const modelList = ref<any[]>([]);
 const depthList = ref([
@@ -55,6 +59,10 @@ watch(
 const decisionTree = ref<any>(null);
 
 async function fetchRequests() {
+    if (!isModelReady) {
+        return;
+    }
+
     const route = useRoute();
 
     if (route.query.model) {
@@ -67,7 +75,7 @@ async function fetchRequests() {
     const response = await Promise.all([
         $fetch(
             `
-        ${$config.public.BACKEND_URL}/game/models/567767bf-65e0-4c08-80fe-3e2885f8dce8`,
+        ${$config.public.BACKEND_URL}/game/models/${gameId.value}`,
             {
                 method: "GET",
                 headers: {
@@ -76,7 +84,7 @@ async function fetchRequests() {
             }
         ),
         $fetch(
-            `${$config.public.S3_API_URL}/decTree_567767bf-65e0-4c08-80fe-3e2885f8dce8_${
+            `${$config.public.S3_API_URL}/decTree_${gameId.value}_${
                 route.query.model || "churn0"
             }_${route.query.depth || "depth3"}.json`,
             {

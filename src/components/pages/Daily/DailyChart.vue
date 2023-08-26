@@ -1,5 +1,9 @@
 <script lang="ts" setup>
 import { Chart } from "chart.js/auto";
+import { useGameStore } from "@/store/game";
+
+const gameStore = useGameStore();
+const { isAnalyticsReady } = gameStore;
 
 defineOptions({
     name: "DailyChart",
@@ -125,6 +129,9 @@ function initChart() {
 }
 
 onMounted(() => {
+    if (!isAnalyticsReady) {
+        return;
+    }
     initChart();
 });
 
@@ -169,6 +176,13 @@ watch(route, (value) => {
             </div>
         </div>
 
-        <canvas ref="lineChart" style="height: 90%; width: 100%"></canvas>
+        <canvas v-if="isAnalyticsReady" ref="lineChart" style="height: 90%; width: 100%"></canvas>
+
+        <div
+            v-else
+            class="flex justify-center items-center w-full h-full text-[1.5rem] text-cl-main"
+        >
+            No data
+        </div>
     </div>
 </template>

@@ -1,6 +1,9 @@
 <script lang="ts" setup>
 import * as d3 from "d3";
-import { PropType } from "nuxt/dist/app/compat/capi";
+import { useGameStore } from "@/store/game";
+
+const gameStore = useGameStore();
+const { isAnalyticsReady } = gameStore;
 
 const props = defineProps({
     data: {
@@ -14,6 +17,9 @@ const { data } = toRefs(props);
 const margin = { top: 30, right: 30, bottom: 30, left: 50 };
 
 onMounted(() => {
+    if (!isAnalyticsReady) {
+        return;
+    }
     const width = parseInt(d3.select("#my_dataviz").style("width")) - margin.left - margin.right;
     const height = parseInt(d3.select("#my_dataviz").style("height")) - margin.top - margin.bottom;
     // append the svg object to the body of the page
@@ -166,5 +172,13 @@ onMounted(() => {
 </script>
 
 <template>
-    <div id="my_dataviz" class="relative aspect-[16/9]"></div>
+    <div>
+        <div v-if="isAnalyticsReady" id="my_dataviz" class="relative aspect-[16/9]"></div>
+        <div
+            v-else
+            class="flex justify-center items-center aspect-[16/9] w-full h-full text-[1.5rem] text-cl-main"
+        >
+            No data
+        </div>
+    </div>
 </template>

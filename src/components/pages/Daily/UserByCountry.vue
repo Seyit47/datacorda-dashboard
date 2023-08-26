@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import { Chart } from "chart.js/auto";
+import { useGameStore } from "@/store/game";
+
+const gameStore = useGameStore();
+const { isAnalyticsReady } = gameStore;
 
 const props = defineProps({
     countryList: {
@@ -80,6 +84,9 @@ function initChart() {
 }
 
 onMounted(() => {
+    if (!isAnalyticsReady) {
+        return;
+    }
     initChart();
 });
 
@@ -102,6 +109,19 @@ onBeforeUnmount(() => {
         >
             Users by country
         </h2>
-        <canvas ref="barChart" v-bind="$attrs" style="height: 90%; width: 100%"></canvas>
+
+        <canvas
+            v-if="isAnalyticsReady"
+            ref="barChart"
+            v-bind="$attrs"
+            style="height: 90%; width: 100%"
+        ></canvas>
+
+        <div
+            v-else
+            class="flex justify-center items-center aspect-[16/11] w-full h-full text-[1.5rem] text-cl-main"
+        >
+            No data
+        </div>
     </div>
 </template>
