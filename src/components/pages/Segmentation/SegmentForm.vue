@@ -30,6 +30,7 @@ watch(instance, () => {
     if (!instance.value) {
         segmentList.value = [];
         filter.size = 2;
+        filter.model = "churn";
         fetchRequests();
         return;
     }

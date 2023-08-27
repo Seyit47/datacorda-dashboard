@@ -85,6 +85,7 @@ async function onDeleteSegmentation(index: number) {
 
     savedResults.value.splice(index, 1);
     $toast.success("Segmentation deleted successfully!");
+    segmentationInstance.value = null;
 }
 
 await fetchRequests();
@@ -114,7 +115,7 @@ await fetchRequests();
                             @delete="onDeleteSegmentation"
                         />
                         <SegmentationCodeBlock
-                            v-if="currentId"
+                            v-if="segmentationInstance"
                             :model="segmentationInstance.model"
                             :segmentation-id="currentId"
                         />
