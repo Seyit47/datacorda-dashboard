@@ -269,26 +269,16 @@ await fetchRequests();
                 :key="index"
                 class="flex items-center py-4 px-6 rounded-[10px]"
                 :class="{
-                    'bg-gradient-to-b from-[#FF4C00] to-[#FFFFFF]':
-                        colors[filter.size - 2][index] === 1,
-                    'bg-gradient-to-b from-[#DB6107] to-[#D9D9D900]':
-                        colors[filter.size - 2][index] === 2,
-                    'bg-gradient-to-b from-[#B3780F] to-[#D9D9D900]':
-                        colors[filter.size - 2][index] === 3,
-                    'bg-gradient-to-b from-[#978815] to-[#D9D9D900]':
-                        colors[filter.size - 2][index] === 4,
-                    'bg-gradient-to-b from-[#988715] to-[#D9D9D900]':
-                        colors[filter.size - 2][index] === 5,
-                    'bg-gradient-to-b from-[#80951A] to-[#80951A00]':
-                        colors[filter.size - 2][index] === 6,
-                    'bg-gradient-to-b from-[#779A1C] to-[#D9D9D900]':
-                        colors[filter.size - 2][index] === 7,
-                    'bg-gradient-to-b from-[#68A31F] to-[#D9D9D900]':
-                        colors[filter.size - 2][index] === 8,
-                    'bg-gradient-to-b from-[#53AF23] to-[#53AF2300]':
-                        colors[filter.size - 2][index] === 9,
-                    'bg-gradient-to-b from-[#2EC52B] to-[#D9D9D900]':
-                        colors[filter.size - 2][index] === 10,
+                    'bg-[#FF4C00]': colors[filter.size - 2][index] === 1,
+                    'bg-[#DB6107]': colors[filter.size - 2][index] === 2,
+                    'bg-[#B3780F]': colors[filter.size - 2][index] === 3,
+                    'bg-[#978815]': colors[filter.size - 2][index] === 4,
+                    'bg-[#988715]': colors[filter.size - 2][index] === 5,
+                    'bg-[#80951A]': colors[filter.size - 2][index] === 6,
+                    'bg-[#779A1C]': colors[filter.size - 2][index] === 7,
+                    'bg-[#68A31F]': colors[filter.size - 2][index] === 8,
+                    'bg-[#53AF23]': colors[filter.size - 2][index] === 9,
+                    'bg-[#2EC52B]': colors[filter.size - 2][index] === 10,
                 }"
             >
                 <div class="flex items-center gap-x-2.5">

@@ -61,7 +61,6 @@ function initChart() {
             ],
         },
         options: {
-            aspectRatio: 19 / 7,
             responsive: true,
             plugins: {
                 legend: {
@@ -107,21 +106,10 @@ onMounted(() => {
     }
     initChart();
 });
-
-onBeforeUnmount(() => {
-    barChart.value = null;
-
-    if (!chart.value) {
-        return;
-    }
-
-    chart.value.destroy();
-    chart.value = null;
-});
 </script>
 
 <template>
-    <div class="flex flex-col justify-center gap-y-7.5">
+    <div class="flex flex-col justify-center gap-y-7.5 w-full h-full">
         <h2
             class="text-[1.2rem] font-bold text-transparent bg-clip-text bg-gradient-to-t from-cl-purple to-cl-main"
         >

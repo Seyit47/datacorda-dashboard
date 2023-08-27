@@ -102,17 +102,6 @@ function initChart() {
 onMounted(() => {
     initChart();
 });
-
-onBeforeUnmount(() => {
-    barChart.value = null;
-
-    if (!chart.value) {
-        return;
-    }
-
-    chart.value.destroy();
-    chart.value = null;
-});
 </script>
 
 <template>

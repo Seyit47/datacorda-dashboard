@@ -114,19 +114,6 @@ onMounted(() => {
     initChart();
 });
 
-function destroyChart() {
-    if (!chart.value) {
-        return;
-    }
-    chart.value.stop();
-    chart.value.destroy();
-}
-
-onBeforeUnmount(() => {
-    barChart.value = null;
-    destroyChart();
-});
-
 function numberToFixed(value: number, point: number) {
     return value.toFixed(point);
 }

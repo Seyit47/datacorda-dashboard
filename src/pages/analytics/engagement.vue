@@ -155,20 +155,11 @@ await fetchRequests();
                 </div>
                 <div class="flex flex-col gap-y-5">
                     <div class="grid grid-cols-[repeat(15,minmax(0,1fr))] gap-x-3">
-                        <div class="col-span-8">
-                            <div class="rounded-[20px] shadow-lg bg-white border p-7.5">
-                                <DailyAd :daily-ad-view="dailyAdView" />
-                            </div>
-                        </div>
                         <div class="col-span-7">
-                            <div
-                                class="w-full h-full rounded-[20px] shadow-xl bg-white border p-10"
-                            >
-                                <EventCount :event-count="eventCount" />
+                            <div class="w-full h-full rounded-[20px] shadow-xl bg-white border p-6">
+                                <DailyRetention :daily-retention="dailyRetention" />
                             </div>
                         </div>
-                    </div>
-                    <div class="grid grid-cols-[repeat(15,minmax(0,1fr))] gap-x-3">
                         <div class="col-span-8">
                             <div class="rounded-[20px] shadow-lg border p-6">
                                 <div
@@ -189,9 +180,20 @@ await fetchRequests();
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="grid grid-cols-[repeat(15,minmax(0,1fr))] gap-x-3">
                         <div class="col-span-7">
-                            <div class="w-full h-full rounded-[20px] shadow-xl bg-white border p-6">
-                                <DailyRetention :daily-retention="dailyRetention" />
+                            <div
+                                class="w-full h-full rounded-[20px] shadow-xl bg-white border p-10"
+                            >
+                                <EventCount :event-count="eventCount" />
+                            </div>
+                        </div>
+                        <div class="col-span-8">
+                            <div
+                                class="rounded-[20px] shadow-lg bg-white border p-7.5 w-full h-full"
+                            >
+                                <DailyAd :daily-ad-view="dailyAdView" />
                             </div>
                         </div>
                     </div>

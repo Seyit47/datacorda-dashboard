@@ -134,25 +134,6 @@ onMounted(() => {
     }
     initChart();
 });
-
-onBeforeUnmount(() => {
-    lineChart.value = null;
-
-    if (!chart.value) {
-        return;
-    }
-
-    chart.value.destroy();
-    chart.value = null;
-});
-
-const route = useRoute();
-
-watch(route, (value) => {
-    if (value.path.includes("analytics")) {
-        chart.value.resize();
-    }
-});
 </script>
 
 <template>

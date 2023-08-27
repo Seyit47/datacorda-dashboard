@@ -3,7 +3,7 @@ import { storeToRefs } from "pinia";
 import UserProfile from "./UserProfile.vue";
 import IconAnalytics from "@/components/icons/IconAnalytics.vue";
 import IconModel from "@/components/icons/IconModel.vue";
-import { useAuthStore } from "@/store/auth";
+import { useGameStore } from "@/store/game";
 
 const props = defineProps({
     isModel: {
@@ -25,8 +25,8 @@ onMounted(() => {
     moveLine();
 });
 
-const authStore = useAuthStore();
-const { user } = storeToRefs(authStore);
+const gameStore = useGameStore();
+const { game } = storeToRefs(gameStore);
 
 const line = ref<HTMLElement | null>(null);
 
@@ -118,7 +118,9 @@ function moveLine() {
 
         <div class="ml-auto pr-2.5">
             <div class="flex items-center gap-x-6">
-                <span class="text-size_18/16">{{ user?.username }}</span>
+                <span v-if="game" class="text-[1.3rem] text-cl-main font-bold">{{
+                    game.game_name
+                }}</span>
                 <UserProfile />
             </div>
         </div>

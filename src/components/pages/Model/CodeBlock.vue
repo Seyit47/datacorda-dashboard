@@ -28,7 +28,7 @@ function copyToClipboard() {
 
 <template>
     <div class="w-full h-full">
-        <div v-if="isModelReady" class="flex flex-col w-full h-full">
+        <div v-if="isModelReady" class="flex flex-col w-full h-full rounded-[10px] shadow-md">
             <div class="flex items-center rounded-t-[10px] border px-5 py-3 bg-cl-main">
                 <span class="text-[2rem] text-white">API</span>
 
