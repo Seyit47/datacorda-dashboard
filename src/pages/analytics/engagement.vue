@@ -161,7 +161,15 @@ await fetchRequests();
                             </div>
                         </div>
                         <div class="col-span-8">
-                            <div class="rounded-[20px] shadow-lg border p-6">
+                            <div
+                                class="flex flex-col gap-y-4.5 rounded-[20px] shadow-lg border p-6"
+                            >
+                                <h2
+                                    class="text-[1.2rem] font-bold text-transparent bg-clip-text bg-gradient-to-t from-cl-purple to-cl-main"
+                                >
+                                    Retention Table
+                                </h2>
+
                                 <div
                                     v-if="isAnalyticsReady"
                                     class="relative 3xl:pt-[45%] pt-[44.7%]"

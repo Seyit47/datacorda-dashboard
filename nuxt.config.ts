@@ -57,6 +57,10 @@ export default defineNuxtConfig({
         },
     },
 
+    experimental: {
+        payloadExtraction: false,
+    },
+
     css: ["@/assets/scss/style.scss"],
 
     modules: [
