@@ -31,7 +31,7 @@ const navbarList = computed(() => {
             </div>
             <div style="grid-column: span 13 / span 13">
                 <div class="relative min-h-screen">
-                    <AppHeader :is-model="true" class="sticky top-0 z-[9999]" />
+                    <AppHeader tab="model" class="sticky top-0 z-[9999]" />
                     <slot />
                 </div>
             </div>
