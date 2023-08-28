@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { Chart } from "chart.js/auto";
+import { format } from "date-fns";
 import { useGameStore } from "@/store/game";
 
 const gameStore = useGameStore();
@@ -30,9 +31,10 @@ function initChart() {
     const sortedData = activeUsers.value.sort(
         (a, b) => Number(new Date(a.date)) - Number(new Date(b.date))
     );
+
     const latestActiveUserData = sortedData;
 
-    const dates = latestActiveUserData.map((entry) => entry.date);
+    const dates = latestActiveUserData.map((entry) => format(new Date(entry.date), "d MMM, yyyy"));
     const chartActiveUsers = latestActiveUserData.map((entry) => +entry.count);
     const sortedNewUsers = newUsers.value.sort(
         (a, b) => Number(new Date(a.date)) - Number(new Date(b.date))

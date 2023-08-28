@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Chart } from "chart.js/auto";
-
+import { format } from "date-fns";
 import dailyPurchase from "./daily_purchase_revenue.json";
 
 // const props = defineProps({
@@ -21,7 +21,7 @@ function initChart() {
         (a, b) => Number(new Date(a.date)) - Number(new Date(b.date))
     );
 
-    const countries = sortedData.map((entry) => entry.date);
+    const countries = sortedData.map((entry) => format(new Date(entry.date), "d MMM, yyyy"));
     const users = sortedData.map((entry) => entry.revenue);
 
     const ctx = barChart.value as HTMLCanvasElement;

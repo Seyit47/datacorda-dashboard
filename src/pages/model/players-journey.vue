@@ -84,9 +84,9 @@ async function fetchRequests() {
             }
         ),
         $fetch(
-            `${$config.public.S3_API_URL}/decTree_${gameId.value}_${
-                route.query.model || "churn0"
-            }_${route.query.depth || "depth3"}.json`,
+            `${$config.public.S3_API_URL}/decTree_${gameId.value}_${route.query.model || "churn"}_${
+                route.query.depth || "depth3"
+            }.json`,
             {
                 method: "GET",
                 headers: {
