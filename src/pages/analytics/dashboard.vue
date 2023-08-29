@@ -26,6 +26,45 @@ const platformList = ref([
     },
 ]);
 
+const segmentationList = ref([
+    {
+        name: "D1",
+        value: "churn1",
+    },
+    {
+        name: "D2",
+        value: "churn2",
+    },
+    {
+        name: "D3",
+        value: "churn3",
+    },
+    {
+        name: "D4",
+        value: "churn4",
+    },
+    {
+        name: "D5",
+        value: "churn5",
+    },
+    {
+        name: "D6",
+        value: "churn6",
+    },
+    {
+        name: "D7",
+        value: "churn7",
+    },
+    {
+        name: "D14",
+        value: "churn14",
+    },
+    {
+        name: "D30",
+        value: "churn30",
+    },
+]);
+
 const filter = reactive<any>({
     platform: "ALL",
     range: null,
@@ -146,7 +185,7 @@ watch(
             query: {
                 feature: churnRetentionFilter.feature || undefined,
                 featureType: churnRetentionFilter.featureType || undefined,
-                target: churnRetentionFilter.target || undefined,
+                target: churnRetentionFilter.segmentation || undefined,
                 platform: filter.platform || undefined,
                 start: filter.range ? filter.range[0] : undefined,
                 end: filter.range ? filter.range[1] : undefined,
@@ -234,9 +273,13 @@ await fetchRequests();
                                     <div class="flex items-center gap-x-5 ml-auto">
                                         <div class="w-50">
                                             <BaseSelect
-                                                v-model="churnRetentionFilter.target"
-                                                :list="['D1']"
+                                                v-model="churnRetentionFilter.segmentation"
+                                                :list="segmentationList"
                                                 placeholder="Segmentation"
+                                                :item-name="(item:any) => item.name"
+                                                :item-value="(item:any) => item.value"
+                                                :init-item-name="(item:any) => item.name"
+                                                :init-item-value="(item:any) => item.value"
                                                 size="lg"
                                             />
                                         </div>
