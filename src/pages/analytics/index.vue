@@ -83,7 +83,7 @@ async function fetchRequests() {
         filter.range = [route.query.start, route.query.end];
     }
 
-    const response = await Promise.all([
+    const response = await Promise.allSettled([
         $fetch(
             `${$config.public.BACKEND_URL}/dashboard/daily-active-user-number/${
                 gameId.value
@@ -152,15 +152,15 @@ async function fetchRequests() {
         ),
     ]);
 
-    activeUsers.value = response[0] as any[];
-    newUsers.value = response[1] as any[];
-    sessionNumber.value = response[2] as any[];
-    userInsights.value = response[3] as any;
-    sessionInsights.value = response[4];
-    userByCountry.value = response[5] as any[];
+    activeUsers.value = response[0].status === "fulfilled" ? (response[0].value as any[]) : [];
+    newUsers.value = response[1].status === "fulfilled" ? (response[1].value as any[]) : [];
+    sessionNumber.value = response[2].status === "fulfilled" ? (response[2].value as any[]) : [];
+    userInsights.value = response[3].status === "fulfilled" ? response[3].value : null;
+    sessionInsights.value = response[4].status === "fulfilled" ? response[4].value : null;
+    userByCountry.value = response[5].status === "fulfilled" ? (response[5].value as any[]) : [];
 }
 
-await fetchRequests();
+await useAsyncData(() => fetchRequests());
 </script>
 
 <template>

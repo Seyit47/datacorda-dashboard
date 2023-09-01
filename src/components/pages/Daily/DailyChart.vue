@@ -102,6 +102,28 @@ function initChart() {
                 legend: {
                     display: false,
                 },
+                tooltip: {
+                    bodyFont: {
+                        size:
+                            window.innerWidth >= 2560
+                                ? 20
+                                : window.innerWidth > 1920
+                                ? 16
+                                : window.innerWidth > 1280
+                                ? 14
+                                : 12,
+                    },
+                    titleFont: {
+                        size:
+                            window.innerWidth >= 2560
+                                ? 20
+                                : window.innerWidth > 1920
+                                ? 16
+                                : window.innerWidth > 1280
+                                ? 14
+                                : 12,
+                    },
+                },
             },
             interaction: {
                 intersect: false,
@@ -109,6 +131,18 @@ function initChart() {
             },
             scales: {
                 y: {
+                    ticks: {
+                        font: {
+                            size:
+                                window.innerWidth >= 2560
+                                    ? 16
+                                    : window.innerWidth > 1920
+                                    ? 14
+                                    : window.innerWidth > 1280
+                                    ? 10
+                                    : 6,
+                        },
+                    },
                     beginAtZero: true,
                     grid: {
                         drawOnChartArea: false,
@@ -117,7 +151,14 @@ function initChart() {
                 x: {
                     ticks: {
                         font: {
-                            size: 9,
+                            size:
+                                window.innerWidth >= 2560
+                                    ? 16
+                                    : window.innerWidth > 1920
+                                    ? 14
+                                    : window.innerWidth > 1280
+                                    ? 10
+                                    : 6,
                         },
                         autoSkip: false,
                     },
@@ -131,9 +172,10 @@ function initChart() {
 }
 
 onMounted(() => {
-    if (!isAnalyticsReady) {
+    if (!isAnalyticsReady || activeUsers.value.length === 0 || newUsers.value.length === 0) {
         return;
     }
+
     initChart();
 });
 </script>
@@ -159,11 +201,15 @@ onMounted(() => {
             </div>
         </div>
 
-        <canvas v-if="isAnalyticsReady" ref="lineChart" style="height: 90%; width: 100%"></canvas>
+        <canvas
+            v-if="isAnalyticsReady && newUsers.length > 0 && activeUsers.length > 0"
+            ref="lineChart"
+            style="height: 90%; width: 100%"
+        ></canvas>
 
         <div
             v-else
-            class="flex justify-center items-center w-full h-full text-[1.5rem] text-cl-main"
+            class="flex justify-center items-center aspect-[16/6] w-full h-full text-[1.5rem] text-cl-main"
         >
             No data
         </div>

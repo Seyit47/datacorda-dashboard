@@ -68,11 +68,33 @@ function initChart() {
             ],
         },
         options: {
-            aspectRatio: 19 / 7,
+            aspectRatio: 18 / 7,
             responsive: true,
             plugins: {
                 legend: {
                     display: false,
+                },
+                tooltip: {
+                    bodyFont: {
+                        size:
+                            window.innerWidth >= 2560
+                                ? 20
+                                : window.innerWidth > 1920
+                                ? 16
+                                : window.innerWidth > 1280
+                                ? 14
+                                : 12,
+                    },
+                    titleFont: {
+                        size:
+                            window.innerWidth >= 2560
+                                ? 20
+                                : window.innerWidth > 1920
+                                ? 16
+                                : window.innerWidth > 1280
+                                ? 14
+                                : 12,
+                    },
                 },
             },
             interaction: {
@@ -83,7 +105,14 @@ function initChart() {
                 y: {
                     ticks: {
                         font: {
-                            size: window.innerWidth > 1280 ? 10 : 6,
+                            size:
+                                window.innerWidth >= 2560
+                                    ? 14
+                                    : window.innerWidth > 1920
+                                    ? 12
+                                    : window.innerWidth > 1280
+                                    ? 10
+                                    : 6,
                         },
                         autoSkip: false,
                     },
@@ -95,7 +124,14 @@ function initChart() {
                 x: {
                     ticks: {
                         font: {
-                            size: window.innerWidth > 1280 ? 8 : 6,
+                            size:
+                                window.innerWidth >= 2560
+                                    ? 14
+                                    : window.innerWidth > 1920
+                                    ? 12
+                                    : window.innerWidth > 1280
+                                    ? 10
+                                    : 6,
                         },
                         autoSkip: false,
                     },
@@ -112,6 +148,7 @@ onMounted(() => {
     if (!isAnalyticsReady) {
         return;
     }
+
     initChart();
 });
 </script>

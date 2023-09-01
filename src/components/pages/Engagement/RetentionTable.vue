@@ -32,7 +32,7 @@ function onMouseLeave() {
 
 <template>
     <table class="w-full border-collapse">
-        <thead class="sticky top-0 z-[9999] bg-white">
+        <thead class="sticky top-0 z-[10] bg-white">
             <tr class="text-[0.7vw] whitespace-nowrap">
                 <th class="px-2.5 py-[0.5vw]">Date</th>
                 <th class="px-2.5 py-[0.5vw]">Users</th>

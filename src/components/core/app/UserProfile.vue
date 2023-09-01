@@ -29,11 +29,11 @@ function logout() {
 </script>
 
 <template>
-    <div class="relative pt-1">
+    <div class="relative">
         <Popover v-slot="{ open }">
             <PopoverButton
                 :class="open ? '' : 'text-opacity-90'"
-                class="min-w-16 px-3.75 py-4 rounded-[20px] bg-cl-main hover:text-cl-main hover:bg-white border border-cl-main text-size_18/16 text-white font-bold uppercase"
+                class="min-w-16 px-3.75 py-4 rounded-[20px] bg-cl-main hover:text-cl-main hover:bg-white border border-cl-main text-[1.2rem] text-white font-bold uppercase"
             >
                 <span v-if="user"
                     >{{ user.username.slice(0, 1) }}{{ user.username.slice(-1) }}</span

@@ -50,6 +50,28 @@ function initChart() {
                 legend: {
                     display: false,
                 },
+                tooltip: {
+                    bodyFont: {
+                        size:
+                            window.innerWidth >= 2560
+                                ? 20
+                                : window.innerWidth > 1920
+                                ? 16
+                                : window.innerWidth > 1280
+                                ? 14
+                                : 12,
+                    },
+                    titleFont: {
+                        size:
+                            window.innerWidth >= 2560
+                                ? 20
+                                : window.innerWidth > 1920
+                                ? 16
+                                : window.innerWidth > 1280
+                                ? 14
+                                : 12,
+                    },
+                },
             },
             scales: {
                 y: {
@@ -59,7 +81,14 @@ function initChart() {
                     },
                     ticks: {
                         font: {
-                            size: window.innerWidth > 1280 ? 9 : 6,
+                            size:
+                                window.innerWidth >= 2560
+                                    ? 16
+                                    : window.innerWidth > 1920
+                                    ? 14
+                                    : window.innerWidth > 1280
+                                    ? 10
+                                    : 8,
                         },
                         autoSkip: false,
                     },
@@ -67,7 +96,14 @@ function initChart() {
                 x: {
                     ticks: {
                         font: {
-                            size: window.innerWidth > 1280 ? 9 : 6,
+                            size:
+                                window.innerWidth >= 2560
+                                    ? 16
+                                    : window.innerWidth > 1920
+                                    ? 14
+                                    : window.innerWidth > 1280
+                                    ? 10
+                                    : 8,
                         },
                         autoSkip: false,
                     },

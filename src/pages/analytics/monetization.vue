@@ -75,7 +75,7 @@ const revenueList = ref([
                 <div class="flex flex-col gap-y-5">
                     <div class="grid grid-cols-12 gap-x-2">
                         <div v-for="(item, index) in revenueList" :key="index" class="col-span-3">
-                            <div class="px-7.5 py-5 border shadow-lg rounded-[20px]">
+                            <div class="px-7.5 py-5 border shadow-lg rounded-[20px] h-full">
                                 <div class="flex items-center">
                                     <span class="w-[60%] text-size_28/16 font-medium text-cl-main">
                                         {{ item.name }}

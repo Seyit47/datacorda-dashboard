@@ -25,7 +25,7 @@ function truncateValue(value: number) {
 
 <template>
     <div class="py-5 px-7.5 rounded-[20px] border shadow-lg bg-white">
-        <div v-if="isAnalyticsReady">
+        <div v-if="isAnalyticsReady && overviewData">
             <div class="flex items-center justify-between px-2 pt-9 pb-6 border-b">
                 <div class="flex gap-x-4">
                     <div class="w-11.25 pt-3">

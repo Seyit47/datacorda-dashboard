@@ -16,7 +16,7 @@ defineProps({
 <template>
     <div class="w-full h-full">
         <div
-            v-if="isModelReady"
+            v-if="isModelReady && data"
             class="flex px-2.5 pt-5 pb-10 rounded-[20px] w-full h-full"
             style="
                 background: radial-gradient(

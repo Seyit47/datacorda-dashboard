@@ -25,7 +25,7 @@ function truncateValue(value: number) {
 
 <template>
     <div class="flex">
-        <div v-if="isModelReady" class="w-[62%]">
+        <div v-if="isModelReady && data" class="w-[62%]">
             <div class="relative pt-[100%]">
                 <div class="absolute top-0 left-0 w-full h-full">
                     <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
@@ -63,13 +63,13 @@ function truncateValue(value: number) {
                                     r="54"
                                     fill="none"
                                     :transform="`rotate(${
-                                        270 - getValueFromPercetage(data[0].percentage, 180)
+                                        270 - getValueFromPercetage(data[1].percentage, 180)
                                     } 60 60)`"
                                     stroke="#2EC52B"
                                     stroke-width="12"
                                     :stroke-dasharray="100"
                                     :stroke-dashoffset="
-                                        100 - getValueFromPercetage(data[0].percentage, 50)
+                                        100 - getValueFromPercetage(data[1].percentage, 50)
                                     "
                                     pathLength="100"
                                 />
@@ -88,7 +88,7 @@ function truncateValue(value: number) {
                                 <div class="flex flex-col items-center w-full py-[5%]">
                                     <span class="text-[90%] text-[#2EC52B] font-bold">Retain</span>
                                     <span class="text-[160%] text-[#2EC52B] font-bold">
-                                        {{ data[0].percentage }}%
+                                        {{ data[1].percentage }}%
                                     </span>
                                 </div>
                             </div>
@@ -112,12 +112,12 @@ function truncateValue(value: number) {
                             r="54"
                             fill="none"
                             :transform="`rotate(${
-                                270 - getValueFromPercetage(data[1].percentage, 180)
+                                270 - getValueFromPercetage(data[0].percentage, 180)
                             } 60 60)`"
                             stroke="#FF4C00"
                             stroke-width="9"
                             :stroke-dasharray="100"
-                            :stroke-dashoffset="100 - getValueFromPercetage(data[1].percentage, 50)"
+                            :stroke-dashoffset="100 - getValueFromPercetage(data[0].percentage, 50)"
                             pathLength="100"
                         />
                     </svg>
@@ -134,7 +134,7 @@ function truncateValue(value: number) {
                             <div class="flex flex-col items-center w-full py-[5%]">
                                 <span class="text-[90%] text-[#FF4C00] font-bold">Churn</span>
                                 <span class="text-[160%] text-[#FF4C00] font-bold">
-                                    {{ data[1].percentage }}%
+                                    {{ data[0].percentage }}%
                                 </span>
                             </div>
                         </div>
