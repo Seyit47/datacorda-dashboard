@@ -64,11 +64,11 @@ await fetchRequests();
 
 <template>
     <div class="relative min-h-screen w-full">
-        <div class="grid grid-cols-[repeat(15,minmax(0,1fr))]">
+        <div class="grid grid-cols-[repeat(18,minmax(0,1fr))]">
             <div class="col-span-2 relative bg-cl-main">
                 <AppSidebar class="sticky top-0 left-0 h-screen" />
             </div>
-            <div style="grid-column: span 13 / span 13">
+            <div style="grid-column: span 16 / span 16">
                 <div class="relative min-h-screen">
                     <AppHeader
                         v-model="currentGame"
