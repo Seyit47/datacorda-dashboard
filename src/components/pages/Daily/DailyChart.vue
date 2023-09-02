@@ -153,9 +153,9 @@ function initChart() {
                         font: {
                             size:
                                 window.innerWidth >= 2560
-                                    ? 16
-                                    : window.innerWidth > 1920
                                     ? 14
+                                    : window.innerWidth > 1920
+                                    ? 12
                                     : window.innerWidth > 1280
                                     ? 10
                                     : 6,

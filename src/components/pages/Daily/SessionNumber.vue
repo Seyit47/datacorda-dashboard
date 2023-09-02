@@ -126,11 +126,11 @@ function initChart() {
                         font: {
                             size:
                                 window.innerWidth >= 2560
-                                    ? 14
-                                    : window.innerWidth > 1920
                                     ? 12
-                                    : window.innerWidth > 1280
+                                    : window.innerWidth > 1920
                                     ? 10
+                                    : window.innerWidth > 1280
+                                    ? 8
                                     : 6,
                         },
                         autoSkip: false,

@@ -88,7 +88,7 @@ onMounted(() => {
         <h2
             class="px-10 py-10 text-[2rem] font-bold text-transparent bg-clip-text bg-gradient-to-t from-cl-purple to-cl-main"
         >
-            Decision Tree
+            Path
         </h2>
         <div v-if="isModelReady" id="main" class="w-full h-full"></div>
 

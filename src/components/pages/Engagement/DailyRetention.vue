@@ -119,12 +119,12 @@ function initChart() {
                         font: {
                             size:
                                 window.innerWidth >= 2560
-                                    ? 16
+                                    ? 12
                                     : window.innerWidth > 1920
-                                    ? 14
-                                    : window.innerWidth > 1280
                                     ? 10
-                                    : 8,
+                                    : window.innerWidth > 1280
+                                    ? 8
+                                    : 6,
                         },
                         autoSkip: false,
                     },
