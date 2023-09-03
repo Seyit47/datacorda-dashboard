@@ -65,8 +65,14 @@ watch(currentGame, (currentId) => {
 
     setGameId(gameList.value[index].id);
 
-    reloadNuxtApp({
-        force: true,
+    const router = useRouter();
+    const route = useRoute();
+
+    router.push({
+        name: String(route.name),
+        query: {
+            game: String(gameList.value[index].id),
+        },
     });
 });
 

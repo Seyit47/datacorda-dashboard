@@ -16,7 +16,7 @@ const props = defineProps({
 const { decisionTree } = toRefs(props);
 
 onMounted(() => {
-    if (!isModelReady) {
+    if (!isModelReady || !decisionTree.value) {
         return;
     }
     type EChartsOption = echarts.EChartsOption;
@@ -90,7 +90,7 @@ onMounted(() => {
         >
             Path
         </h2>
-        <div v-if="isModelReady" id="main" class="w-full h-full"></div>
+        <div v-if="isModelReady && decisionTree" id="main" class="w-full h-full"></div>
 
         <div
             v-else

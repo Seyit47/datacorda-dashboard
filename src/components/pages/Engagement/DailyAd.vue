@@ -138,7 +138,7 @@ function initChart() {
 }
 
 onMounted(() => {
-    if (!isAnalyticsReady) {
+    if (!isAnalyticsReady || dailyAdView.value.length === 0) {
         return;
     }
     initChart();
@@ -153,7 +153,11 @@ onMounted(() => {
             Daily Ad View
         </h2>
 
-        <canvas v-if="isAnalyticsReady" ref="barChart" v-bind="$attrs"></canvas>
+        <canvas
+            v-if="isAnalyticsReady && dailyAdView.length > 0"
+            ref="barChart"
+            v-bind="$attrs"
+        ></canvas>
 
         <div
             v-else

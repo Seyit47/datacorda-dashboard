@@ -35,31 +35,14 @@ const depthList = ref([
 ]);
 
 const filter = reactive<any>({
-    model: "churn",
+    model: null,
     depth: "depth3",
 });
-
-watch(
-    filter,
-    () => {
-        const router = useRouter();
-        router.replace({
-            name: "model-players-journey",
-            query: {
-                model: filter.model || undefined,
-                depth: filter.depth || undefined,
-            },
-        });
-    },
-    {
-        deep: true,
-    }
-);
 
 const decisionTree = ref<any>(null);
 
 async function fetchRequests() {
-    if (!isModelReady) {
+    if (!isModelReady || !filter.model) {
         return;
     }
 
@@ -72,35 +55,59 @@ async function fetchRequests() {
         filter.depth = route.query.depth;
     }
 
-    const response = await Promise.all([
-        $fetch(
-            `
-        ${$config.public.BACKEND_URL}/game/models/${gameId.value}`,
-            {
-                method: "GET",
-                headers: {
-                    authorization: `Bearer ${accessToken.value}`,
-                },
-            }
-        ),
-        $fetch(
-            `${$config.public.S3_API_URL}/decTree_${gameId.value}_${route.query.model || "churn"}_${
-                route.query.depth || "depth3"
-            }.json`,
-            {
-                method: "GET",
-                headers: {
-                    authorization: `Bearer ${accessToken.value}`,
-                },
-                responseType: "json",
-            }
-        ),
-    ]);
+    const response = await $fetch(
+        `${$config.public.S3_API_URL}/decTree_${gameId.value}_${filter.model}_${
+            route.query.depth || "depth3"
+        }.json`,
+        {
+            method: "GET",
+            headers: {
+                authorization: `Bearer ${accessToken.value}`,
+            },
+            responseType: "json",
+        }
+    );
 
-    modelList.value = response[0] as any[];
-    decisionTree.value = response[1];
+    decisionTree.value = response;
 }
 
+async function fetchModelList() {
+    if (!isModelReady) {
+        return;
+    }
+    const response = await $fetch(
+        `
+        ${$config.public.BACKEND_URL}/game/models/${gameId.value}`,
+        {
+            method: "GET",
+            headers: {
+                authorization: `Bearer ${accessToken.value}`,
+            },
+        }
+    );
+
+    modelList.value = response as any[];
+    filter.model = (response as any[]).length > 0 ? (response as any[])[0] : null;
+
+    watch(
+        filter,
+        () => {
+            const router = useRouter();
+            router.replace({
+                name: "model-players-journey",
+                query: {
+                    model: filter.model || undefined,
+                    depth: filter.depth || undefined,
+                },
+            });
+        },
+        {
+            deep: true,
+        }
+    );
+}
+
+await fetchModelList();
 await fetchRequests();
 </script>
 

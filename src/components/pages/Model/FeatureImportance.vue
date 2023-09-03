@@ -118,7 +118,7 @@ function initChart() {
 }
 
 onMounted(() => {
-    if (!isModelReady) {
+    if (!isModelReady || featureImportance.value.length === 0) {
         return;
     }
     initChart();
@@ -133,7 +133,7 @@ onMounted(() => {
             Feature Importance
         </h2>
         <canvas
-            v-if="isModelReady"
+            v-if="isModelReady && featureImportance.length > 0"
             ref="barChart"
             v-bind="$attrs"
             style="height: 100%; width: 100%"

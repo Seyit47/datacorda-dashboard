@@ -138,7 +138,7 @@ function initChart() {
 }
 
 onMounted(() => {
-    if (!isAnalyticsReady) {
+    if (!isAnalyticsReady || dailyRetention.value.length === 0) {
         return;
     }
     initChart();
@@ -154,7 +154,7 @@ onMounted(() => {
         </h2>
 
         <canvas
-            v-if="isAnalyticsReady"
+            v-if="isAnalyticsReady && dailyRetention.length > 0"
             ref="barChart"
             v-bind="$attrs"
             style="height: 100%; width: 100%"

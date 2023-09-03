@@ -17,7 +17,7 @@ const { data } = toRefs(props);
 const margin = { top: 30, right: 30, bottom: 30, left: 50 };
 
 onMounted(() => {
-    if (!isAnalyticsReady) {
+    if (!isAnalyticsReady || data.value.length === 0) {
         return;
     }
     const width = parseInt(d3.select("#dataviz").style("width")) - margin.left - margin.right;
@@ -154,7 +154,7 @@ function kernelEpanechnikov(k: number) {
 
 <template>
     <div>
-        <div v-if="isAnalyticsReady" id="dataviz" class="aspect-[16/9]"></div>
+        <div v-if="isAnalyticsReady && data.length > 0" id="dataviz" class="aspect-[16/9]"></div>
         <div
             v-else
             class="flex justify-center items-center aspect-[16/9] w-full h-full text-[1.5rem] text-cl-main"

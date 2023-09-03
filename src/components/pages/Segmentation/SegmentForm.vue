@@ -10,6 +10,7 @@ import { useGameStore } from "@/store/game";
 
 const gameStore = useGameStore();
 const { isModelReady } = gameStore;
+const { gameId } = storeToRefs(gameStore);
 
 const props = defineProps({
     instance: {
@@ -21,7 +22,7 @@ const props = defineProps({
 const { instance } = toRefs(props);
 
 const filter = reactive<any>({
-    model: "churn",
+    model: null,
     size: 2,
     range: null,
 });
@@ -67,23 +68,13 @@ const currentSegmentIndex = ref();
 
 const emit = defineEmits(["refresh"]);
 
-watch(
-    filter,
-    () => {
-        fetchRequests();
-    },
-    {
-        deep: true,
-    }
-);
-
 const { $config } = useNuxtApp();
 
 const authStore = useAuthStore();
 const { accessToken } = storeToRefs(authStore);
 
 async function fetchRequests() {
-    if (!isModelReady) {
+    if (!isModelReady || !filter.model) {
         $toast.error("Model is not ready yet!");
         return;
     }
@@ -101,33 +92,20 @@ async function fetchRequests() {
             query.append("end", filter.range[1]);
         }
 
-        const response = await Promise.all([
-            $fetch(
-                `${$config.public.BACKEND_URL}/game/models/567767bf-65e0-4c08-80fe-3e2885f8dce8`,
-                {
-                    method: "GET",
-                    headers: {
-                        authorization: `Bearer ${accessToken.value}`,
-                    },
-                }
-            ),
-            $fetch(
-                `${$config.public.BACKEND_URL}/prediction/analytics/${
-                    filter.model
-                }?game_id=567767bf-65e0-4c08-80fe-3e2885f8dce8&${query.toString()}`,
-                {
-                    method: "GET",
-                    headers: {
-                        authorization: `Bearer ${accessToken.value}`,
-                    },
-                }
-            ),
-        ]);
-
-        modelList.value = response[0] as any[];
+        const response = await $fetch(
+            `${$config.public.BACKEND_URL}/prediction/analytics/${filter.model}?game_id=${
+                gameId.value
+            }&${query.toString()}`,
+            {
+                method: "GET",
+                headers: {
+                    authorization: `Bearer ${accessToken.value}`,
+                },
+            }
+        );
 
         if (instance.value) {
-            segmentList.value = (response[1] as any[]).reduce((acc, curValue, curIndex) => {
+            segmentList.value = (response as any[]).reduce((acc, curValue, curIndex) => {
                 const segment = {
                     name:
                         segmentList.value[curIndex] && segmentList.value[curIndex].name
@@ -143,7 +121,7 @@ async function fetchRequests() {
             return;
         }
 
-        segmentList.value = (response[1] as any[]).reduce((acc, curValue, curIndex) => {
+        segmentList.value = (response as any[]).reduce((acc, curValue, curIndex) => {
             const segment = {
                 name:
                     segmentList.value[curIndex] && segmentList.value[curIndex].name
@@ -161,7 +139,7 @@ async function fetchRequests() {
 }
 
 async function submitForm() {
-    if (!isModelReady) {
+    if (!isModelReady || !filter.model) {
         $toast.error("Model is not ready yet!");
         return;
     }
@@ -227,6 +205,36 @@ function onDelete(index: number) {
     filter.size -= 1;
 }
 
+async function fetchModelList() {
+    if (!isModelReady) {
+        return;
+    }
+    const response = await $fetch(
+        `
+        ${$config.public.BACKEND_URL}/game/models/${gameId.value}`,
+        {
+            method: "GET",
+            headers: {
+                authorization: `Bearer ${accessToken.value}`,
+            },
+        }
+    );
+
+    modelList.value = response as any[];
+    filter.model = (response as any[]).length > 0 ? (response as any[])[0] : null;
+
+    watch(
+        filter,
+        () => {
+            fetchRequests();
+        },
+        {
+            deep: true,
+        }
+    );
+}
+
+await fetchModelList();
 await fetchRequests();
 </script>
 
@@ -366,7 +374,7 @@ await fetchRequests();
             <button
                 v-if="filter.size < 10"
                 class="flex justify-center items-center border rounded-[10px] py-2"
-                :disabled="isLoading"
+                :disabled="isLoading || !filter.model"
                 @click="filter.size += 1"
             >
                 <span class="text-[2rem] text-cl-gray font-bold">+</span>

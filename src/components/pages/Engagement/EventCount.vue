@@ -117,7 +117,7 @@ function initChart() {
 }
 
 onMounted(() => {
-    if (!isAnalyticsReady) {
+    if (!isAnalyticsReady || eventCount.value.length === 0) {
         return;
     }
     initChart();
@@ -132,7 +132,7 @@ onMounted(() => {
             Event Count by Event Name
         </h2>
         <canvas
-            v-if="isAnalyticsReady"
+            v-if="isAnalyticsReady && eventCount.length > 0"
             ref="barChart"
             v-bind="$attrs"
             style="height: 100%; width: 100%"

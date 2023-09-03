@@ -2,7 +2,8 @@
 import { useField, useForm, useIsFormDirty } from "vee-validate";
 import { object, string } from "yup";
 import { storeToRefs } from "pinia";
-import { useToast, TYPE } from "vue-toastification";
+import { useToast } from "vue-toastification";
+import ModalConfirm from "@/components/core/app/ModalConfirm/Wrapper.vue";
 import { useAuthStore } from "@/store/auth";
 import { ApiGame } from "@/types/api/game";
 import { useGameStore } from "~/store/game";
@@ -16,7 +17,9 @@ const gameStore = useGameStore();
 const { setGame, setGameId } = gameStore;
 const { game, gameId } = storeToRefs(gameStore);
 
-const toast = useToast();
+const modalConfirm = ref<any>(null);
+
+const $toast = useToast();
 
 const router = useRouter();
 
@@ -88,10 +91,7 @@ async function onSubmit() {
     try {
         const errors = await form.validate();
         if (!errors.valid) {
-            toast("Entered invalid information!", {
-                type: TYPE.ERROR,
-                timeout: 3000,
-            });
+            $toast.error("Entered invalid information!");
             return;
         }
 
@@ -106,17 +106,14 @@ async function onSubmit() {
             },
         });
 
-        toast.success("Game created successfully!");
+        $toast.success("Game created successfully!");
 
         form.resetForm();
 
         await fetchRequests();
     } catch (err: any) {
         const res = err.response?._data;
-        toast(res?.message, {
-            type: TYPE.ERROR,
-            timeout: 3000,
-        });
+        $toast.error(res?.message);
     }
 }
 
@@ -143,6 +140,29 @@ function goToDashboard(item: ApiGame) {
     });
 }
 
+async function onDeleteGame(index: number) {
+    const id = gameList.value[index].id;
+    const { isSubmit } = await modalConfirm.value.open("Are you really want to delete this game?");
+
+    if (!isSubmit) {
+        return;
+    }
+
+    await $fetch(`${$config.public.BACKEND_URL}/game/${id}`, {
+        method: "DELETE",
+        headers: {
+            authorization: `Bearer ${accessToken.value}`,
+        },
+    });
+
+    if (currentGame.value && currentGame.value.id === id) {
+        currentGame.value = null;
+    }
+
+    gameList.value.splice(index, 1);
+    $toast.success("Game deleted successfully!");
+}
+
 await fetchRequests();
 </script>
 
@@ -159,7 +179,7 @@ await fetchRequests();
 
             <form class="w-full flex flex-col gap-y-10 items-center" @submit.prevent="onSubmit">
                 <div class="flex flex-col gap-y-2.5 w-full h-full">
-                    <div v-for="(item, index) in gameList" :key="index" class="w-full">
+                    <div v-for="(item, index) in gameList" :key="index" class="relative w-full">
                         <button
                             type="button"
                             class="flex items-center justify-center w-full h-full py-3 font-bold text-[1.3rem] border rounded-[10px] transition-colors duration-150"
@@ -171,6 +191,19 @@ await fetchRequests();
                             @click="onSelect(item)"
                         >
                             {{ item.game_name }}
+                        </button>
+
+                        <button
+                            type="button"
+                            class="absolute top-1/2 -translate-y-1/2 right-2.5 w-8.5 text-red-500"
+                            @click="onDeleteGame(index)"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 37" fill="none">
+                                <path
+                                    d="M9.99992 29.2917C9.99992 30.9875 11.4999 32.375 13.3333 32.375H26.6666C28.4999 32.375 29.9999 30.9875 29.9999 29.2917V13.875C29.9999 12.1792 28.4999 10.7917 26.6666 10.7917H13.3333C11.4999 10.7917 9.99992 12.1792 9.99992 13.875V29.2917ZM29.9999 6.16667H25.8333L24.6499 5.07208C24.3499 4.79458 23.9166 4.625 23.4833 4.625H16.5166C16.0833 4.625 15.6499 4.79458 15.3499 5.07208L14.1666 6.16667H9.99992C9.08325 6.16667 8.33325 6.86042 8.33325 7.70833C8.33325 8.55625 9.08325 9.25 9.99992 9.25H29.9999C30.9166 9.25 31.6666 8.55625 31.6666 7.70833C31.6666 6.86042 30.9166 6.16667 29.9999 6.16667Z"
+                                    fill="currentColor"
+                                />
+                            </svg>
                         </button>
                     </div>
                     <div
@@ -223,5 +256,6 @@ await fetchRequests();
                 </button>
             </form>
         </div>
+        <ModalConfirm ref="modalConfirm" />
     </div>
 </template>

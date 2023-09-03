@@ -124,7 +124,7 @@ function initChart() {
 }
 
 onMounted(() => {
-    if (!isAnalyticsReady) {
+    if (!isAnalyticsReady || levelFlow.value.length === 0) {
         return;
     }
     initChart();
@@ -139,7 +139,7 @@ onMounted(() => {
             D1 Retention Level Flow
         </h2>
         <canvas
-            v-if="isAnalyticsReady"
+            v-if="isAnalyticsReady && levelFlow.length > 0"
             ref="barChart"
             v-bind="$attrs"
             style="height: 90%; width: 100%"

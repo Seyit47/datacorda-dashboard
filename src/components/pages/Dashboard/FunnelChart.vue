@@ -108,7 +108,7 @@ function initChart() {
 }
 
 onMounted(() => {
-    if (!isAnalyticsReady) {
+    if (!isAnalyticsReady && !data.value) {
         return;
     }
     initChart();
@@ -126,7 +126,7 @@ function numberToFixed(value: number, point: number) {
         >
             Retain 1 Funnel
         </h2>
-        <div v-if="isAnalyticsReady" class="relative w-full h-full border">
+        <div v-if="isAnalyticsReady && data" class="relative w-full h-full border">
             <canvas ref="barChart" v-bind="$attrs" style="height: 90%; width: 100%"></canvas>
             <div class="absolute top-0 left-0 w-full h-full">
                 <div class="grid grid-cols-5 divide-x h-full pt-1">

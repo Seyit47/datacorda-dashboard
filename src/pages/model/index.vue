@@ -25,34 +25,16 @@ const { gameId } = storeToRefs(gameStore);
 const modelList = ref<any[]>([]);
 
 const filter = reactive<any>({
-    model: "churn",
+    model: null,
     range: null,
 });
-
-watch(
-    filter,
-    () => {
-        const router = useRouter();
-        router.replace({
-            name: "model",
-            query: {
-                model: filter.model || undefined,
-                start: filter.range ? filter.range[0] : undefined,
-                end: filter.range ? filter.range[1] : undefined,
-            },
-        });
-    },
-    {
-        deep: true,
-    }
-);
 
 const featureImportance = ref<any[]>([]);
 const predictionAnalytics = ref<any>(null);
 const modelPerformance = ref<any>(null);
 
 async function fetchRequests() {
-    if (!isModelReady) {
+    if (!isModelReady && !filter.model) {
         return;
     }
     const route = useRoute();
@@ -68,10 +50,11 @@ async function fetchRequests() {
         filter.range = [route.query.start, route.query.end];
     }
 
-    const response = await Promise.all([
+    const response = await Promise.allSettled([
         $fetch(
-            `
-        ${$config.public.BACKEND_URL}/game/models/${gameId.value}`,
+            `${$config.public.BACKEND_URL}/ai/feature-importance/${filter.model}?game_id=${
+                gameId.value
+            }&${query.toString()}`,
             {
                 method: "GET",
                 headers: {
@@ -80,9 +63,9 @@ async function fetchRequests() {
             }
         ),
         $fetch(
-            `${$config.public.BACKEND_URL}/ai/feature-importance/${
-                route.query.model || "churn"
-            }?game_id=${gameId.value}&${query.toString()}`,
+            `${$config.public.BACKEND_URL}/prediction/analytics/${filter.model}?game_id=${
+                gameId.value
+            }&${query.toString()}`,
             {
                 method: "GET",
                 headers: {
@@ -91,20 +74,9 @@ async function fetchRequests() {
             }
         ),
         $fetch(
-            `${$config.public.BACKEND_URL}/prediction/analytics/${
-                route.query.model || "churn"
-            }?game_id=${gameId.value}&${query.toString()}`,
-            {
-                method: "GET",
-                headers: {
-                    authorization: `Bearer ${accessToken.value}`,
-                },
-            }
-        ),
-        $fetch(
-            `${$config.public.BACKEND_URL}/ai/model-performance/${
-                route.query.model || "churn"
-            }?game_id=${gameId.value}&${query.toString()}`,
+            `${$config.public.BACKEND_URL}/ai/model-performance/${filter.model}?game_id=${
+                gameId.value
+            }&${query.toString()}`,
             {
                 method: "GET",
                 headers: {
@@ -114,12 +86,50 @@ async function fetchRequests() {
         ),
     ]);
 
-    modelList.value = response[0] as any[];
-    featureImportance.value = response[1] as any[];
-    predictionAnalytics.value = response[2];
-    modelPerformance.value = response[3];
+    featureImportance.value =
+        response[0].status === "fulfilled" ? (response[0].value as any[]) : [];
+    predictionAnalytics.value = response[1].status === "fulfilled" ? response[1].value : null;
+    modelPerformance.value = response[2].status === "fulfilled" ? response[2].value : null;
 }
 
+async function fetchModelList() {
+    if (!isModelReady) {
+        return;
+    }
+    const response = await $fetch(
+        `
+        ${$config.public.BACKEND_URL}/game/models/${gameId.value}`,
+        {
+            method: "GET",
+            headers: {
+                authorization: `Bearer ${accessToken.value}`,
+            },
+        }
+    );
+
+    modelList.value = response as any[];
+    filter.model = (response as any[]).length > 0 ? (response as any[])[0] : null;
+
+    watch(
+        filter,
+        () => {
+            const router = useRouter();
+            router.replace({
+                name: "model",
+                query: {
+                    model: filter.model || undefined,
+                    start: filter.range ? filter.range[0] : undefined,
+                    end: filter.range ? filter.range[1] : undefined,
+                },
+            });
+        },
+        {
+            deep: true,
+        }
+    );
+}
+
+await fetchModelList();
 await fetchRequests();
 </script>
 

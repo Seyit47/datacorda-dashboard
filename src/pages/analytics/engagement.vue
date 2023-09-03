@@ -79,8 +79,8 @@ async function fetchRequests() {
         filter.range = [route.query.start, route.query.end];
     }
 
-    const response = await Promise.all([
-        $fetch(
+    const response = await Promise.allSettled([
+        $fetch<any[]>(
             `${$config.public.BACKEND_URL}/dashboard/daily-ad-view/${
                 gameId.value
             }?${query.toString()}`,
@@ -91,7 +91,7 @@ async function fetchRequests() {
                 },
             }
         ),
-        $fetch(
+        $fetch<any[]>(
             `${$config.public.BACKEND_URL}/dashboard/event-count-by-eventname/${
                 gameId.value
             }?${query.toString()}`,
@@ -102,24 +102,27 @@ async function fetchRequests() {
                 },
             }
         ),
-        $fetch(`${$config.public.BACKEND_URL}/dashboard/daily-retention/${gameId.value}`, {
+        $fetch<any[]>(`${$config.public.BACKEND_URL}/dashboard/daily-retention/${gameId.value}`, {
             method: "GET",
             headers: {
                 authorization: `Bearer ${accessToken.value}`,
             },
         }),
-        $fetch(`${$config.public.BACKEND_URL}/dashboard/daily-d1-retention/${gameId.value}`, {
-            method: "GET",
-            headers: {
-                authorization: `Bearer ${accessToken.value}`,
-            },
-        }),
+        $fetch<any[]>(
+            `${$config.public.BACKEND_URL}/dashboard/daily-d1-retention/${gameId.value}`,
+            {
+                method: "GET",
+                headers: {
+                    authorization: `Bearer ${accessToken.value}`,
+                },
+            }
+        ),
     ]);
 
-    dailyAdView.value = response[0] as any[];
-    eventCount.value = response[1] as any[];
-    retentionTable.value = response[2] as any[];
-    dailyRetention.value = response[3] as any[];
+    dailyAdView.value = response[0].status === "fulfilled" ? response[0].value : [];
+    eventCount.value = response[1].status === "fulfilled" ? response[1].value : [];
+    retentionTable.value = response[2].status === "fulfilled" ? response[2].value : [];
+    dailyRetention.value = response[3].status === "fulfilled" ? response[3].value : [];
 }
 
 await fetchRequests();
@@ -171,7 +174,7 @@ await fetchRequests();
                                 </h2>
 
                                 <div
-                                    v-if="isAnalyticsReady"
+                                    v-if="isAnalyticsReady && retentionTable.length > 0"
                                     class="relative 3xl:pt-[45%] pt-[44.7%]"
                                 >
                                     <div

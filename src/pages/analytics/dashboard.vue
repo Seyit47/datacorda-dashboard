@@ -125,20 +125,20 @@ async function fetchRequests() {
         filter.range = [route.query.start, route.query.end];
     }
 
-    const response = await Promise.all([
-        $fetch(`${$config.public.BACKEND_URL}/dashboard/ftue-funnel/${gameId.value}`, {
+    const response = await Promise.allSettled([
+        $fetch<any>(`${$config.public.BACKEND_URL}/dashboard/ftue-funnel/${gameId.value}`, {
             method: "GET",
             headers: {
                 authorization: `Bearer ${accessToken.value}`,
             },
         }),
-        $fetch(`${$config.public.BACKEND_URL}/dashboard/level-flow-d1/${gameId.value}`, {
+        $fetch<any[]>(`${$config.public.BACKEND_URL}/dashboard/level-flow-d1/${gameId.value}`, {
             method: "GET",
             headers: {
                 authorization: `Bearer ${accessToken.value}`,
             },
         }),
-        $fetch(
+        $fetch<any[]>(
             `${$config.public.BACKEND_URL}/dashboard/distribution/${
                 gameId.value
             }?${query.toString()}`,
@@ -149,29 +149,38 @@ async function fetchRequests() {
                 },
             }
         ),
-        $fetch(`${$config.public.BACKEND_URL}/dashboard/distribution-features/${gameId.value}`, {
-            method: "GET",
-            headers: {
-                authorization: `Bearer ${accessToken.value}`,
-            },
-        }),
+        $fetch<any>(
+            `${$config.public.BACKEND_URL}/dashboard/distribution-features/${gameId.value}`,
+            {
+                method: "GET",
+                headers: {
+                    authorization: `Bearer ${accessToken.value}`,
+                },
+            }
+        ),
     ]);
 
-    funnelData.value = response[0];
-    levelFlow.value = response[1] as any[];
-    churnRetention.value = response[2] as any[];
-    const categoricFeatures = (response[3] as any)["categoric_features"].map((item: string) => {
-        return {
-            name: item,
-            type: "categoric",
-        };
-    });
-    const numericFeatures = (response[3] as any)["numeric_features"].map((item: string) => {
-        return {
-            name: item,
-            type: "numeric",
-        };
-    });
+    funnelData.value = response[0].status === "fulfilled" ? response[0].value : null;
+    levelFlow.value = response[1].status === "fulfilled" ? response[1].value : [];
+    churnRetention.value = response[2].status === "fulfilled" ? response[2].value : [];
+    const categoricFeatures =
+        response[3].status === "fulfilled"
+            ? response[3].value["categoric_features"].map((item: string) => {
+                  return {
+                      name: item,
+                      type: "categoric",
+                  };
+              })
+            : null;
+    const numericFeatures =
+        response[3].status === "fulfilled"
+            ? response[3].value["numeric_features"].map((item: string) => {
+                  return {
+                      name: item,
+                      type: "numeric",
+                  };
+              })
+            : null;
     featureList.value = [...categoricFeatures, ...numericFeatures];
 }
 
