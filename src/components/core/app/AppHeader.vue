@@ -37,6 +37,11 @@ function initLine(el: HTMLElement) {
 
 onMounted(() => {
     moveLine();
+    window.addEventListener("resize", moveLine);
+});
+
+onBeforeUnmount(() => {
+    window.removeEventListener("resize", moveLine);
 });
 
 const line = ref<HTMLElement | null>(null);
