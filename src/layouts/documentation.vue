@@ -66,13 +66,80 @@ async function fetchRequests() {
 }
 
 await fetchRequests();
+
+const navbarList = computed(() => {
+    return [
+        {
+            label: "Introduction",
+            icon: defineAsyncComponent(() => import("@/components/icons/IconIntroduction.vue")),
+            name: "documentation",
+            children: [
+                {
+                    label: "What is Datacorda?",
+                    hash: "#what-is-datacorda",
+                },
+                {
+                    label: "Why Datacorda?",
+                    hash: "#why-datacorda",
+                },
+                {
+                    label: "How Datacorda works?",
+                    hash: "#how-datacorda-works",
+                },
+            ],
+        },
+        {
+            label: "Event Design Taxonomy",
+            icon: defineAsyncComponent(() => import("@/components/icons/IconDesignTaxonomy.vue")),
+            name: "documentation-event-design-taxonomy",
+        },
+        {
+            label: "Integration",
+            icon: defineAsyncComponent(() => import("@/components/icons/IconIntegration.vue")),
+            name: "documentation-integration",
+            children: [
+                {
+                    label: "Data collection",
+                    hash: "#data-collection",
+                },
+                {
+                    label: "Access for Datacorda",
+                    hash: "#access-datacorda",
+                },
+            ],
+        },
+        {
+            label: "Dashboard Usage",
+            icon: defineAsyncComponent(() => import("@/components/icons/IconDashboardUsage.vue")),
+            name: "documentation-dashboard-usage",
+            children: [
+                {
+                    label: "Analytics Tab",
+                    hash: "#analytics-tab",
+                },
+                {
+                    label: "Model section",
+                    hash: "#model-section",
+                },
+                {
+                    label: "Segmentation section",
+                    hash: "#segmentation-section",
+                },
+                {
+                    label: "Player's journey section",
+                    hash: "#players-journey",
+                },
+            ],
+        },
+    ];
+});
 </script>
 
 <template>
     <div class="relative min-h-screen w-full">
         <div class="grid grid-cols-[repeat(18,minmax(0,1fr))]">
             <div class="col-span-2 relative bg-cl-main">
-                <AppSidebar class="sticky top-0 left-0 h-screen" />
+                <AppSidebar :list="navbarList" class="sticky top-0 left-0 h-screen" />
             </div>
             <div style="grid-column: span 16 / span 16">
                 <div class="relative min-h-screen">
