@@ -1,8 +1,10 @@
-<script lang="ts" setup>
-defineProps({
-    content: {
-        type: String,
-        default: "",
+<script lang="ts">
+export default defineComponent({
+    props: {
+        content: {
+            type: String,
+            default: "",
+        },
     },
 });
 </script>

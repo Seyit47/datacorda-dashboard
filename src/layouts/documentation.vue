@@ -96,7 +96,40 @@ const navbarList = computed(() => {
         {
             label: "Integration",
             icon: defineAsyncComponent(() => import("@/components/icons/IconIntegration.vue")),
-            name: "documentation-event-design-taxonomy",
+            name: "documentation-integration",
+            children: [
+                {
+                    label: "Data collection",
+                    hash: "#data-collection",
+                },
+                {
+                    label: "Access for Datacorda",
+                    hash: "#access-datacorda",
+                },
+            ],
+        },
+        {
+            label: "Dashboard Usage",
+            icon: defineAsyncComponent(() => import("@/components/icons/IconDashboardUsage.vue")),
+            name: "documentation-dashboard-usage",
+            children: [
+                {
+                    label: "Analytics Tab",
+                    hash: "#analytics-tab",
+                },
+                {
+                    label: "Model section",
+                    hash: "#model-section",
+                },
+                {
+                    label: "Segmentation section",
+                    hash: "#segmentation-section",
+                },
+                {
+                    label: "Player's journey section",
+                    hash: "#players-journey",
+                },
+            ],
         },
     ];
 });

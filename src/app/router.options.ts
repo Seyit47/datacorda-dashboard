@@ -16,6 +16,10 @@ export default <RouterConfig>{
             const handler = () => {
                 resolve();
             };
+            if (from.name !== undefined && to.hash) {
+                app.hook("page:transition:finish", handler);
+                return;
+            }
             app.hook("page:finish", handler);
         });
 

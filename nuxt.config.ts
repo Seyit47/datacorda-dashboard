@@ -70,6 +70,7 @@ export default defineNuxtConfig({
         "@vueuse/nuxt",
         "@vite-pwa/nuxt",
         "nuxt-headlessui",
+        "@nuxt/image",
     ],
 
     headlessui: {
