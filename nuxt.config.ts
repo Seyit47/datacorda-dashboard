@@ -57,6 +57,14 @@ export default defineNuxtConfig({
         },
     },
 
+    hooks: {
+        "vite:extendConfig": (config, { isClient }) => {
+            if (isClient) {
+                (config!.resolve!.alias! as any).vue = "vue/dist/vue.esm-bundler";
+            }
+        },
+    },
+
     experimental: {
         payloadExtraction: false,
     },

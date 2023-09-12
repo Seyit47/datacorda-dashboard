@@ -108,29 +108,6 @@ const navbarList = computed(() => {
                 },
             ],
         },
-        {
-            label: "Dashboard Usage",
-            icon: defineAsyncComponent(() => import("@/components/icons/IconDashboardUsage.vue")),
-            name: "documentation-dashboard-usage",
-            children: [
-                {
-                    label: "Analytics Tab",
-                    hash: "#analytics-tab",
-                },
-                {
-                    label: "Model section",
-                    hash: "#model-section",
-                },
-                {
-                    label: "Segmentation section",
-                    hash: "#segmentation-section",
-                },
-                {
-                    label: "Player's journey section",
-                    hash: "#players-journey",
-                },
-            ],
-        },
     ];
 });
 </script>
