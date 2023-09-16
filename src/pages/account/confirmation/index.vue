@@ -13,6 +13,14 @@ const { setUser, setAccessToken } = authStore;
 
 definePageMeta({
     layout: "account",
+    middleware: async (to) => {
+        if (!to.query) {
+            await navigateTo({
+                name: "analytics",
+                replace: true,
+            });
+        }
+    },
 });
 
 const route = useRoute();
